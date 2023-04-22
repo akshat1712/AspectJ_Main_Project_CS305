@@ -18,7 +18,7 @@ import java.util.concurrent.CompletableFuture;
 public class ParallizeAspect {
 
     @Around("@annotation(Parallize) && execution(* *(..))")
-    public Object wrap(final ProceedingJoinPoint point) {
+    public Future<?> wrap(final ProceedingJoinPoint point) {
 
         final ExecutorService executor = Executors.newFixedThreadPool(1);
 
@@ -27,6 +27,8 @@ public class ParallizeAspect {
         if (!Future.class.isAssignableFrom(returned) && !returned.equals(Void.TYPE)) {
             throw new IllegalStateException(String.format("Function Returns"));
         }
+
+        CompletableFuture<Object> future = new CompletableFuture<>();
 
         final Future<?> result = executor.submit(
                 () -> {
@@ -42,21 +44,9 @@ public class ParallizeAspect {
                     return ret;
                 });
 
-        Object res = null;
-        if (Future.class.isAssignableFrom(returned)) {
-            res = result;
-        }
+        executor.shutdown();
 
-        CompletableFuture.runAsync(() -> {
-            try {
-                result.get();
-            } catch (Exception e) {
-                e.printStackTrace();
-            } finally {
-                executor.shutdown();
-            }
-        });
-        return res;
+        return result;
     }
 
 }

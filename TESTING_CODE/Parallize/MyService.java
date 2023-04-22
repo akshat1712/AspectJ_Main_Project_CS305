@@ -3,44 +3,35 @@ import java.util.concurrent.CompletableFuture;
 
 public class MyService {
 
-    @Parallize
-    public static Future<Integer> method1() {
-        try {
 
-            Thread.sleep(200);
-            System.out.println("COMPLETED METHOD1 SLEEP");
-            CompletableFuture<Integer> future = new CompletableFuture<>();
-            future.complete(5);
-            return future;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+    public int a;
+    public int b;
+
+    public int method1() {
+        for(int i=0;i<100;i++){
+            System.out.println("method1");
         }
+        System.out.println("COMPLETED METHOD1 SLEEP");
+        return 1;
     }
 
-    @Parallize
-    public static Future<Integer> method2() {
-        try {
 
-            Thread.sleep(500);
-            System.out.println("COMPLETED METHOD2 SLEEP");
-
-            CompletableFuture<Integer> future = new CompletableFuture<>();
-            future.complete(2);
-            return future;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+    public int method2() {
+        for(int i=0;i<100;i++){
+            System.out.println("method2");
         }
+        System.out.println("COMPLETED METHOD2 SLEEP");
+        return 3;
     }
 
     public void method3() {
         try {
             long startTime = System.currentTimeMillis();
-            Future<Integer> res1=method1();
-            Future<Integer> res2=method2();
+            int res1=method1();
+            int res2=method2();
             
-            System.out.println(res1.get() + res2.get());
+            System.out.println(res1+ res2);
+            
             long endTime = System.currentTimeMillis();
             
             System.out.println("Execution time of " + "() took " + (endTime - startTime) + " ms.");

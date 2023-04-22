@@ -1,0 +1,53 @@
+[warning] bad version number found in /mnt/c/Users/aksha/OneDrive/Desktop/CS305_MAJOR_PROJECT/TEST/files/lib/aspectjrt.jar expected 1.8.2 found 1.9.6
+	
+/mnt/c/Users/aksha/OneDrive/Desktop/CS305_MAJOR_PROJECT/TEST/Logger/LoggerAspect.java:44 [warning] no match for this type name: MyService [Xlint:invalidAbsoluteTypeName]
+@Before("set(* MyService.* )")
+               ^^^^^^
+	[Xlint:invalidAbsoluteTypeName]
+/mnt/c/Users/aksha/OneDrive/Desktop/CS305_MAJOR_PROJECT/TEST/Logger/LoggerAspect.java:60 [warning] no match for this type name: MyService [Xlint:invalidAbsoluteTypeName]
+@After("set(* MyService.* )")
+              ^^^^^^
+	[Xlint:invalidAbsoluteTypeName]
+/mnt/c/Users/aksha/OneDrive/Desktop/CS305_MAJOR_PROJECT/TEST/Logger/LoggerAspect.java:75 [warning] no match for this type name: MyService [Xlint:invalidAbsoluteTypeName]
+@Before("get(* MyService.* )")
+               ^^^^^^
+	[Xlint:invalidAbsoluteTypeName]
+/mnt/c/Users/aksha/OneDrive/Desktop/CS305_MAJOR_PROJECT/TEST/Logger/LoggerAspect.java:76 [warning] advice defined in LoggerAspect has not been applied [Xlint:adviceDidNotMatch]
+	
+/mnt/c/Users/aksha/OneDrive/Desktop/CS305_MAJOR_PROJECT/TEST/Logger/LoggerAspect.java:61 [warning] advice defined in LoggerAspect has not been applied [Xlint:adviceDidNotMatch]
+	
+/mnt/c/Users/aksha/OneDrive/Desktop/CS305_MAJOR_PROJECT/TEST/Logger/LoggerAspect.java:45 [warning] advice defined in LoggerAspect has not been applied [Xlint:adviceDidNotMatch]
+	
+/mnt/c/Users/aksha/OneDrive/Desktop/CS305_MAJOR_PROJECT/TEST/Logger/LoggerAspect.java:40 [warning] advice defined in LoggerAspect has not been applied [Xlint:adviceDidNotMatch]
+	
+/mnt/c/Users/aksha/OneDrive/Desktop/CS305_MAJOR_PROJECT/TEST/Logger/LoggerAspect.java:19 [warning] advice defined in LoggerAspect has not been applied [Xlint:adviceDidNotMatch]
+	
+
+9 warnings
+/mnt/c/Users/aksha/OneDrive/Desktop/CS305_MAJOR_PROJECT/TEST/Logger/ASPECT.jar!/LoggerAspect.class [warning] advice defined in LoggerAspect has not been applied [Xlint:adviceDidNotMatch]
+	
+
+1 warning
+Field c accessed
+Value of field c Before Setting is 0
+Value of field c After Setting is 10
+Field b accessed
+Value of field b Before Setting is 0
+Value of field b After Setting is 10
+Field a accessed
+Value of field a Before Setting is 0
+Value of field a After Setting is 10
+Accessed field a 10
+Field a accessed
+Value of field a Before Setting is 10
+Value of field a After Setting is 100
+Accessed field a 100
+Field b accessed
+Value of field b Before Setting is 10
+Value of field b After Setting is 100
+Field a accessed
+Value of field a Before Setting is 100
+Value of field a After Setting is 20
+Field b accessed
+Value of field b Before Setting is 100
+Value of field b After Setting is 30
