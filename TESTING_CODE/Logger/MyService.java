@@ -2,30 +2,43 @@
 
 public class MyService {
 
-    // public String name,email;
+    public String name,email;
 
     @Logger
-    public void method1( int list[],int a){
-        // name="JANJU";
+    public int[] method1( int num[],int a){
+        name="JANJU";
+        return num;
+    }
+    
+    @Logger
+    public void method2(){
+        email="JANJU2025@gmail.com";
         return;
     }
 
-    public void method2(){
-        // email="JANJU2025@gmail.com";
-        // method1();
-        return;
+    @Logger
+    public void method4() throws Exception{
+        throw new Exception();
     }
-    
+
+    @Logger
     public void method3() {
-        // name="John";
-        // email="123@gmail.com";
+        name="John";
+        email="123@gmail.com";
         
         int list[]= {1,2,3};
 
-        method1(list,5);
-        // method2();
+        list=method1(list,5);
+        method2();
 
-        // name="AKSHAT";
+        try{
+            method4();
+        }
+        catch(Exception e){
+            // System.out.println("Exception caught");
+        }
+
+        name="AKSHAT";
 
         return;
 

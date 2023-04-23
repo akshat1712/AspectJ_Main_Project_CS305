@@ -4,4 +4,5 @@ public class Main {
         service.method3();
         return;
     }
+
 }

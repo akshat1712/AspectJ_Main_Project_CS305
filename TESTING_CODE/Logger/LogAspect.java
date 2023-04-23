@@ -1,5 +1,3 @@
-// LoggerAspect.java:
-
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -8,6 +6,7 @@ import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.annotation.AfterThrowing;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,54 +35,12 @@ public class LogAspect {
 
         for (int i = 0; i < args.length; i++) {
             
-            System.out.println(args[i].getClass());
-
-            if( args[i] instanceof Object[]){
-                String type=null;
-
-                if( args[i] instanceof String[]){
-                    type="STRING";
-                }
-                else if( args[i] instanceof char[]){
-                    type="CHAR";
-                }
-                else if( args[i] instanceof int[]){
-                    type="INTEGER";
-                }
-                else if(args[i] instanceof float[]){
-                    type="FLOAT";
-                }
-                else if( args[i] instanceof double[]){
-                    type="DOUBLE";
-                }
-                else if(args[i] instanceof long[]){
-                    type="LONG";
-                }
-                else if(args[i] instanceof boolean[]){
-                    type="BOOLEAN";
-                }
-                else{
-                    type="OBJECT";
-                    // printLogMessage("Argument is List of  "+type+" of length "+((Object[])args[i]).length+" and contains following elements");
-                    // for(int j=0;j<((Object[])args[i]).length;j++){
-                    //     System.out.println(args[i][j]);
-                    //     // printObjectFieldArgumentType(args[i][j],parameterNames[i]);
-                    // }
-                    continue;
-                }
-
-                System.out.println(1);
-                System.out.println(type);
-
-                printLogMessage("Argument is List of "+type+" of length "+((Object[])args[i]).length+" and contains following elements");
-                for(int j=0;j<((Object[])args[i]).length;j++){
-                    printLogMessage("Arguement "+ parameterNames[i]+"["+j+"]"+": "+((Object[])args[i])[j]);
-                }
-            }
-            else{
-                System.out.println(2);
-                printLogMessage("Arguement "+ parameterNames[i]+": "+args[i]);
-            }
+            String type=getTypeName(args[i]);
+            
+            if(type==null)
+                printLogMessage("Arguement "+ parameterNames[i]+": "+args[i]);            
+            else
+                printLogMessage("Arguement "+ parameterNames[i]+" of TYPE "+type);
 
         }
 
@@ -93,8 +50,26 @@ public class LogAspect {
     public void LogMethodAfter(JoinPoint joinPoint, Object result) {
 
         printLogMessage("Exiting "+joinPoint.getSignature().getName());
-        printLogMessage("Returned value of " + joinPoint.getSignature().getName() + ": " + result);
+
+        String type=getTypeName(result);
+
+        if(type==null)
+            printLogMessage("Returned value of " + joinPoint.getSignature().getName() + ": " + result);
+        else
+            printLogMessage("Returned value of " + joinPoint.getSignature().getName() + " of TYPE "+type);
+
         depth-=1;
+    }
+
+    @AfterThrowing(pointcut = "@annotation(Logger) && execution(* *(..))", throwing = "ex")
+    public void logException(JoinPoint joinPoint, Exception ex) throws Exception {
+        
+        String message= "Exception caught in "+joinPoint.getSignature().getName()+" of CLASS "+joinPoint.getTarget().getClass().getName();
+        
+        printLogMessage(message);
+
+        depth-=1;
+        throw ex;
     }
 
     @Before("set(* MyService.* )")
@@ -103,7 +78,6 @@ public class LogAspect {
         String fieldName = joinPoint.getSignature().getName();
         Object value = null;
         
-        // Get the class name of the object
         String className=null;
 
         try {
@@ -150,8 +124,6 @@ public class LogAspect {
         printLogMessage("Accessed FIELD " + fieldName + " " + value+" of CLASS "+className);
     }
 
-
-
     void printLogMessage(String message){
         for(int i=0;i<depth;i++){
             System.out.print("   ");
@@ -166,20 +138,34 @@ public class LogAspect {
         System.out.println("---> "+message);
 
     }
-
-
-    // void printObjectFieldArgumentType( Object obj,String parameterName){
-    //     printLogMessage("Object of class "+obj.getClass().getName()+" and contains following fields");
-    //     Field[] fields = obj.getClass().getDeclaredFields();
-    //     for (Field field : fields) {
-    //         field.setAccessible(true);
-    //         try {
-    //             printLogMessage("Arguement "+ parameterName+"."+field.getName()+": "+field.get(obj));
-    //         } catch (Exception e) {
-    //             e.printStackTrace();
-    //         }
-    //     }
-    // }
-
     
+    String getTypeName(Object obj){
+        String type=null;
+        if( obj instanceof int[]){
+            type="Integer List";
+        }
+        else if( obj instanceof String[]){
+            type="String List";
+        }
+        else if( obj instanceof char[]){
+            type="Character List";
+        }
+        else if( obj instanceof boolean[]){
+            type="Boolean List";
+        }
+        else if( obj instanceof double[]){
+            type="Double List";
+        }
+        else if( obj instanceof float[]){
+            type="Float List";
+        }
+        else if( obj instanceof long[]){
+            type="Long List";
+        }
+        else if( obj instanceof short[]){
+            type="Short List";
+        }   
+
+        return type;
+    }
 }

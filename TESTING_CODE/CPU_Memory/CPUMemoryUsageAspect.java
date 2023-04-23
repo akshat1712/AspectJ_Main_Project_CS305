@@ -17,29 +17,43 @@ import com.sun.management.OperatingSystemMXBean;
 public class CPUMemoryUsageAspect {
 
     @Around("@annotation(CPUMemoryUsage) && execution(* *(..))")
-    public Object wrap(final ProceedingJoinPoint point) {
+    public Object wrap(final ProceedingJoinPoint point) throws Throwable{
 
         Object ret = null;
         try {
+
+            // MemoryMXBean memoryBean = ManagementFactory.getMemoryMXBean();
+            // MemoryUsage heapUsage = memoryBean.getHeapMemoryUsage();
+
+            Runtime runtime = Runtime.getRuntime();
+            System.gc();
+
+            double startMemory= runtime.totalMemory() - runtime.freeMemory();
+
+            int factor=1024*1024;
             ret = point.proceed();
+
+            double endMemory= runtime.totalMemory() - runtime.freeMemory();
+
+            System.gc();
+
+            System.out.println("Memory Used ( Heap ) in Mb:"+(endMemory-startMemory)/factor);
+
+
+            // System.out.println("Heap Memory Init: " + heapUsage.getInit()/factor + "  Mb");
+            // System.out.println("Heap Memory Used: " + heapUsage.getUsed()/factor + "  Mb");
+            // System.out.println("Heap Memory Committed: " + heapUsage.getCommitted()/factor + "  Mb");
+
+            // MemoryUsage nonHeapUsage = memoryBean.getNonHeapMemoryUsage();
+            // System.out.println("Non-Heap Memory Init: " + nonHeapUsage.getInit()/factor + "  Mb");
+            // System.out.println("Non-Heap Memory Used: " + nonHeapUsage.getUsed()/factor + "  Mb");
+            // System.out.println("Non-Heap Memory Committed: " + nonHeapUsage.getCommitted()/factor + "  Mb");
+
         } catch (Throwable e) {
             e.printStackTrace();
         }
 
-        MemoryMXBean memoryBean = ManagementFactory.getMemoryMXBean();
 
-        MemoryUsage heapUsage = memoryBean.getHeapMemoryUsage();
-
-        int factor=1024*1024;
-
-        System.out.println("Heap Memory Init: " + heapUsage.getInit()/factor + "  Mb");
-        System.out.println("Heap Memory Used: " + heapUsage.getUsed()/factor + "  Mb");
-        System.out.println("Heap Memory Committed: " + heapUsage.getCommitted()/factor + "  Mb");
-
-        MemoryUsage nonHeapUsage = memoryBean.getNonHeapMemoryUsage();
-        System.out.println("Non-Heap Memory Init: " + nonHeapUsage.getInit()/factor + "  Mb");
-        System.out.println("Non-Heap Memory Used: " + nonHeapUsage.getUsed()/factor + "  Mb");
-        System.out.println("Non-Heap Memory Committed: " + nonHeapUsage.getCommitted()/factor + "  Mb");
 
 
         return ret;

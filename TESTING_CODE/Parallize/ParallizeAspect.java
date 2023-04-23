@@ -18,35 +18,41 @@ import java.util.concurrent.CompletableFuture;
 public class ParallizeAspect {
 
     @Around("@annotation(Parallize) && execution(* *(..))")
-    public Future<?> wrap(final ProceedingJoinPoint point) {
+    public Object wrap(final ProceedingJoinPoint point) {
 
         final ExecutorService executor = Executors.newFixedThreadPool(1);
 
         final Class<?> returned = ((MethodSignature) point.getSignature()).getMethod().getReturnType();
-
-        if (!Future.class.isAssignableFrom(returned) && !returned.equals(Void.TYPE)) {
-            throw new IllegalStateException(String.format("Function Returns"));
+        if (!Future.class.isAssignableFrom(returned)
+            && !returned.equals(Void.TYPE)) {
+            throw new IllegalStateException(
+                String.format("Return type is %s, not void or Future, cannot use @Parallize",returned.getCanonicalName())
+            );
         }
-
-        CompletableFuture<Object> future = new CompletableFuture<>();
-
         final Future<?> result = executor.submit(
-                () -> {
-                    Object ret = null;
-                    try {
-                        final Object res = point.proceed();
-                        if (res instanceof Future) {
-                            ret = ((Future<?>) res).get();
-                        }
-                    } catch (final Throwable ex) {
-                        throw new IllegalStateException(String.format("Error in Running Task"));
+            () -> {
+                Object ret = null;
+                try {
+                    final Object res = point.proceed();
+                    if (res instanceof Future) {
+                        ret = ((Future<?>) res).get();
                     }
-                    return ret;
-                });
+                } catch (final Throwable ex) {
+                    throw new IllegalStateException(
+                        String.format("Exception thrown"),ex
+                    );
+                }
+                return ret;
+            }
+        );
+        Object res = null;
+        if (Future.class.isAssignableFrom(returned)) {
+            res = result;
+        }
 
         executor.shutdown();
 
-        return result;
+        return res;
     }
 
 }

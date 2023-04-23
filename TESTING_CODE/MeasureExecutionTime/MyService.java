@@ -1,8 +1,6 @@
-
-
 public class MyService {
 
-    @CPUMemoryUsage
+    @MeasureExecutionTime
     public int method1() {
         int a=0;
         for(int i=0;i<10000;i++){
@@ -11,10 +9,10 @@ public class MyService {
         return a;
     }
 
-    @CPUMemoryUsage
+    @MeasureExecutionTime
     public int method2() {
         int a=0;
-        for(int i=0;i<10000;i++){
+        for(int i=0;i<100000;i++){
             a+=i;
         }
         return a;
