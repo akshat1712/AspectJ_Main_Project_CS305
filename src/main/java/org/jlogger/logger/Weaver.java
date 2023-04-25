@@ -112,7 +112,7 @@ public class Weaver {
             String fieldSetLoggingAspectContents = new String(fieldSetLoggingAspect.readAllBytes());
             // Replace the placeholder in the aspect with the log file path
             fieldSetLoggingAspectContents = fieldSetLoggingAspectContents.replace("${logFileName}", logFilePath);
-            fieldSetLoggingAspectContents = fieldSetLoggingAspectContents.replace("${FieldNames}", prepareFinalRegex(fieldsRegex,aroundFieldSetPlaceHolder));
+            fieldSetLoggingAspectContents = fieldSetLoggingAspectContents.replace("${FieldSetNames}", prepareFinalRegex(fieldsRegex,aroundFieldSetPlaceHolder));
             // Write the modified aspect to the temp directory
             FileWriter writer = new FileWriter(workDir + System.getProperty("file.separator") + "LoggingAspect.java");
             writer.write(fieldSetLoggingAspectContents);
@@ -126,6 +126,29 @@ public class Weaver {
             return false;
         }
     }
+
+    public boolean weaveFieldGetLogging(ArrayList <String> fieldsRegex){
+        try {
+            // Get the file contents of FieldGetLoggingAspect.java from the resources folder
+            InputStream fieldGetLoggingAspect = Weaver.class.getClassLoader().getResourceAsStream("LoggingAspect.java");
+            String fieldGetLoggingAspectContents = new String(fieldGetLoggingAspect.readAllBytes());
+            // Replace the placeholder in the aspect with the log file path
+            fieldGetLoggingAspectContents = fieldGetLoggingAspectContents.replace("${logFileName}", logFilePath);
+            fieldGetLoggingAspectContents = fieldGetLoggingAspectContents.replace("${FieldGetNames}", prepareFinalRegex(fieldsRegex,aroundFieldGetPlaceHolder));
+            // Write the modified aspect to the temp directory
+            FileWriter writer = new FileWriter(workDir + System.getProperty("file.separator") + "LoggingAspect.java");
+            writer.write(fieldGetLoggingAspectContents);
+            writer.close();
+            String outputFileName = this.jarInputPath.replace(".jar", "_weaved.jar");
+            weaveJarFile(jarInputPath, workDir + System.getProperty("file.separator") + "LoggingAspect.java", workDir + System.getProperty("file.separator") + outputFileName);
+            this.lastWeavedJarPath = workDir + System.getProperty("file.separator") + outputFileName;
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 
     public boolean saveWeavedJar(String path) {
         try {

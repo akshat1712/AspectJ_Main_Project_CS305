@@ -31,76 +31,75 @@ public class LoggingAspect {
 //    }
 
 
-    @Before( "${MethodNames} && !within(LoggingAspect)" )
-    public void LogMethodEntry(JoinPoint joinPoint) {
+//    @Before( "${MethodNames} && !within(LoggingAspect)" )
+//    public void LogMethodEntry(JoinPoint joinPoint) {
+//
+//        String message;
+//        depth+=1;
+//        Object[] args = joinPoint.getArgs();
+//
+//        if (args.length == 0) {
+//            message="Entering "+ joinPoint.getSignature().getName()+" With No arguments";
+//            printLogMessage(message);
+//            return;
+//        }
+//
+//        message="Entering "+ joinPoint.getSignature().getName()+" With Following arguments";
+//        printLogMessage(message);
+//
+//        MethodSignature signature = (MethodSignature) joinPoint.getSignature();
+//        String[] parameterNames = signature.getParameterNames();
+//
+//        for (int i = 0; i < args.length; i++) {
+//
+//            String type=getTypeName(args[i]);
+//
+//            if(type==null){
+//                message="Arguement "+ parameterNames[i]+": "+args[i];
+//                printLogMessage(message);
+//            }
+//            else {
+//                message = "Arguement " + parameterNames[i] + " of TYPE " + type;
+//                printLogMessage(message);
+//            }
+//
+//        }
+//
+//    }
+//
+//    @AfterReturning( pointcut="${MethodNames} && !within(LoggingAspect)", returning = "result" )
+//    public void LogMethodReturn(JoinPoint joinPoint, Object result) {
+//
+//        String message;
+//        message="Exiting "+joinPoint.getSignature().getName();
+//        printLogMessage(message);
+//
+//        String type=getTypeName(result);
+//
+//        if(type==null)
+//            message="Returned value of "+joinPoint.getSignature().getName()+": "+result;
+//        else
+//            message = "Returned value of " + joinPoint.getSignature().getName() + " of TYPE " + type;
+//
+//        printLogMessage(message);
+//
+//        depth-=1;
+//    }
+//
+//    @AfterThrowing(pointcut="${MethodNames} && !within(LoggingAspect)", throwing = "exception")
+//    public void logMethodException(JoinPoint joinPoint, Exception exception) throws Exception {
+//
+//        String message= "Exception caught in "+joinPoint.getSignature().getName()+" of CLASS "+joinPoint.getTarget().getClass().getName();
+//
+//        printLogMessage(message);
+//
+//        depth-=1;
+//        throw exception;
+//    }
 
-        String message;
-        depth+=1;
-        Object[] args = joinPoint.getArgs();
-
-        if (args.length == 0) {
-            message="Entering "+ joinPoint.getSignature().getName()+" With No arguments";
-            printLogMessage(message);
-            return;
-        }
-
-        message="Entering "+ joinPoint.getSignature().getName()+" With Following arguments";
-        printLogMessage(message);
-
-        MethodSignature signature = (MethodSignature) joinPoint.getSignature();
-        String[] parameterNames = signature.getParameterNames();
-
-        for (int i = 0; i < args.length; i++) {
-
-            String type=getTypeName(args[i]);
-
-            if(type==null){
-                message="Arguement "+ parameterNames[i]+": "+args[i];
-                printLogMessage(message);
-            }
-            else {
-                message = "Arguement " + parameterNames[i] + " of TYPE " + type;
-                printLogMessage(message);
-            }
-
-        }
-
-    }
-
-    @AfterReturning( pointcut="${MethodNames} && !within(LoggingAspect)", returning = "result" )
-    public void LogMethodReturn(JoinPoint joinPoint, Object result) {
-
-        String message;
-        message="Exiting "+joinPoint.getSignature().getName();
-        printLogMessage(message);
-
-        String type=getTypeName(result);
-
-        if(type==null)
-            message="Returned value of "+joinPoint.getSignature().getName()+": "+result;
-        else
-            message = "Returned value of " + joinPoint.getSignature().getName() + " of TYPE " + type;
-
-        printLogMessage(message);
-
-        depth-=1;
-    }
-
-    @AfterThrowing(pointcut="${MethodNames} && !within(LoggingAspect)", throwing = "exception")
-    public void logMethodException(JoinPoint joinPoint, Exception exception) throws Exception {
-
-        String message= "Exception caught in "+joinPoint.getSignature().getName()+" of CLASS "+joinPoint.getTarget().getClass().getName();
-
-        printLogMessage(message);
-
-        depth-=1;
-        throw exception;
-    }
-
-//    @Before("${FieldNames} && !within(LoggingAspect)")
+//    @Before("${FieldSetNames} && !within(LoggingAspect)")
 //    public void LogFieldBeforeSet(JoinPoint joinPoint) {
 //
-//        // System.out.println(joinPoint.getSignature().getName());
 //        String fieldName = joinPoint.getSignature().getName();
 //        Object value = null;
 //
@@ -114,8 +113,8 @@ public class LoggingAspect {
 //        }
 //        printLogMessage("Value of FIELD " + fieldName + " of CLASS "+className+ " Before Setting is " + value);
 //    }
-
-//    @After("${FieldNames} && !within(LoggingAspect)")
+//
+//    @After("${FieldSetNames} && !within(LoggingAspect)")
 //    public void LogFieldAfterSet(JoinPoint joinPoint) {
 //
 //        String fieldName = joinPoint.getSignature().getName();
@@ -133,27 +132,22 @@ public class LoggingAspect {
 //        printLogMessage("Value of FIELD " + fieldName + " of CLASS "+className+ " After Setting is " + value);
 //    }
 
-//    @Before("get(* MyService.*) && !within(MethodLoggingAspect)")
-//    public void LogFieldGet(JoinPoint joinPoint) {
-//        String fieldName = joinPoint.getSignature().getName();
-//        Object value = null;
-//        String className=null;
-//        try {
-//            value = joinPoint.getTarget().getClass().getDeclaredField(fieldName).get(joinPoint.getTarget());
-//            className =joinPoint.getTarget().getClass().getDeclaredField(fieldName).getDeclaringClass().getName();
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//
-//        printLogMessage("Accessed FIELD " + fieldName + " " + value+" of CLASS "+className);
-//    }
-//
-//    @Before("within(MyService) &&  execution(new(..)) && !within(MethodLoggingAspect)")
-//    public void logInstantiation( JoinPoint joinPoint ) {
-//        String className=joinPoint.getSignature().getDeclaringTypeName();
-//        printLogMessage("Instantiated CLASS: "+className);
-//    }
+
+    @Before("${FieldGetNames} && !within(LoggingAspect)")
+    public void LogFieldGet(JoinPoint joinPoint) {
+        String fieldName = joinPoint.getSignature().getName();
+        Object value = null;
+        String className=null;
+        try {
+            value = joinPoint.getTarget().getClass().getDeclaredField(fieldName).get(joinPoint.getTarget());
+            className =joinPoint.getTarget().getClass().getDeclaredField(fieldName).getDeclaringClass().getName();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        printLogMessage("Accessed FIELD " + fieldName + " " + value+" of CLASS "+className);
+    }
 
 
     void printLogMessage(String message){
