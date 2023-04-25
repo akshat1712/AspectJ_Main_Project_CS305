@@ -9,7 +9,15 @@ public class Main {
         Weaver weaver = new Weaver("", "input.jar");
         ArrayList<String> methodsRegex = new ArrayList<>();
         methodsRegex.add("*(..)");
-        weaver.weaveExecutionTime(methodsRegex);
+
+//        ArrayList<String> fieldsSetRegex = new ArrayList<>();
+//        ArrayList<String> fieldsGetRegex = new ArrayList<>();
+
+//        fieldsSetRegex.add("MyService.*");
+//        weaver.weaveMethodExecutionTime(methodsRegex);
+        weaver.weaveMethodLogging(methodsRegex);
+//        weaver.weaveFieldSetLogging(fieldsSetRegex);
+
         weaver.extractAspectjrtToJar();
         weaver.saveWeavedJar("weaved.jar");
     }
