@@ -4,18 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="28a7030a-e483-4d60-b8a0-270a23fdea91" name="Changes" comment="Added Auto Compilation and aspectjrt.jar addition in weaved classes">
-      <change beforePath="$PROJECT_DIR$/TESTING_CODE/Logger/ASPECT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/TESTING_CODE/Logger/ASPECT.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TESTING_CODE/Logger/CODE.jar" beforeDir="false" afterPath="$PROJECT_DIR$/TESTING_CODE/Logger/CODE.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TESTING_CODE/Logger/InstanceLog.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/TESTING_CODE/Logger/InstanceLog.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/TESTING_CODE/Logger/LogAspect.java" beforeDir="false" afterPath="$PROJECT_DIR$/TESTING_CODE/Logger/LogAspect.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TESTING_CODE/Logger/Logger.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/TESTING_CODE/Logger/Logger.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/TESTING_CODE/Logger/MyService.class" beforeDir="false" afterPath="$PROJECT_DIR$/TESTING_CODE/Logger/MyService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TESTING_CODE/Logger/MyService.java" beforeDir="false" afterPath="$PROJECT_DIR$/TESTING_CODE/Logger/MyService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TESTING_CODE/Logger/compile.sh" beforeDir="false" afterPath="$PROJECT_DIR$/TESTING_CODE/Logger/compile.sh" afterDir="false" />
-    </list>
+    <list default="true" id="28a7030a-e483-4d60-b8a0-270a23fdea91" name="Changes" comment="Added Auto Compilation and aspectjrt.jar addition in weaved classes" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -114,7 +103,6 @@
       <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
       <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
       <DebugAllEnabled>false</DebugAllEnabled>
-      <ForceTestExec>false</ForceTestExec>
       <method v="2" />
     </configuration>
     <configuration name="AspectJ_Main_Project_CS305 [clean]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
@@ -136,7 +124,6 @@
       <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
       <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
       <DebugAllEnabled>false</DebugAllEnabled>
-      <ForceTestExec>false</ForceTestExec>
       <method v="2" />
     </configuration>
     <recent_temporary>

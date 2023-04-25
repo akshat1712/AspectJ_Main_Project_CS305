@@ -17,7 +17,8 @@ public class LogAspect {
 
     static int depth=0;
 
-    @Before("@annotation(LogMethod) && execution(* *(..))")
+    // @Before("@annotation(LogMethod) && execution(* *(..))")
+    @Before( "execution(* MyService.*(..))" )
     public void LogMethodEntry(JoinPoint joinPoint) {
         depth+=1;
 
@@ -46,7 +47,8 @@ public class LogAspect {
 
     }
 
-    @AfterReturning(pointcut = "@annotation(LogMethod) && execution(* *(..))", returning = "result")
+    // @AfterReturning(pointcut = "@annotation(LogMethod) && execution(* *(..))", returning = "result")
+    @AfterReturning( pointcut="execution(* MyService.*(..))", returning = "result" )
     public void LogMethodReturn(JoinPoint joinPoint, Object result) {
 
         printLogMessage("Exiting "+joinPoint.getSignature().getName());
@@ -61,7 +63,8 @@ public class LogAspect {
         depth-=1;
     }
 
-    @AfterThrowing(pointcut = "@annotation(LogMethod) && execution(* *(..))", throwing = "ex")
+    // @AfterThrowing(pointcut = "@annotation(LogMethod) && execution(* *(..))", throwing = "ex")
+    @AfterThrowing(pointcut="execution(* MyService.*(..))", throwing = "ex")
     public void logMethodException(JoinPoint joinPoint, Exception ex) throws Exception {
         
         String message= "Exception caught in "+joinPoint.getSignature().getName()+" of CLASS "+joinPoint.getTarget().getClass().getName();
@@ -72,7 +75,8 @@ public class LogAspect {
         throw ex;
     }
 
-    @Before("@annotation(LogVariable) && set(* *.*)")
+    // @Before("@annotation(LogVariable) && set(* *.*)")
+    @Before("set(* MyService.*)")
     public void LogFieldBeforeSet(JoinPoint joinPoint) {
 
         // System.out.println(joinPoint.getSignature().getName());
@@ -90,7 +94,8 @@ public class LogAspect {
         printLogMessage("Value of FIELD " + fieldName + " of CLASS "+className+ " Before Setting is " + value);
     }
 
-    @After("@annotation(LogVariable) && set(* *.*)")
+    // @After("@annotation(LogVariable) && set(* *.*)")
+    @After("set(* MyService.*)")
     public void LogFieldAfterSet(JoinPoint joinPoint) {
 
         String fieldName = joinPoint.getSignature().getName();
@@ -108,7 +113,8 @@ public class LogAspect {
         printLogMessage("Value of FIELD " + fieldName + " of CLASS "+className+ " After Setting is " + value);
     }
 
-    @Before("@annotation(LogVariable) && get(* *.*)")
+    // @Before("@annotation(LogVariable) && get(* *.*)")
+    @Before("get(* MyService.*)")
     public void LogFieldGet(JoinPoint joinPoint) {
         String fieldName = joinPoint.getSignature().getName();
         Object value = null;
@@ -125,7 +131,6 @@ public class LogAspect {
     }
 
     @Before("within(MyService) &&  execution(new(..))")
-    // @Before("@annotation(LogClass) &&  call(new(..))")
     public void logInstantiation( JoinPoint joinPoint ) {
         String className=joinPoint.getSignature().getDeclaringTypeName();
 
