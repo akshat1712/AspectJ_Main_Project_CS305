@@ -5,10 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="28a7030a-e483-4d60-b8a0-270a23fdea91" name="Changes" comment="Added Auto Compilation and aspectjrt.jar addition in weaved classes">
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TESTING_CODE/Logger/ASPECT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/TESTING_CODE/Logger/ASPECT.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TESTING_CODE/Logger/CODE.jar" beforeDir="false" afterPath="$PROJECT_DIR$/TESTING_CODE/Logger/CODE.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TESTING_CODE/Logger/MyService.class" beforeDir="false" afterPath="$PROJECT_DIR$/TESTING_CODE/Logger/MyService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TESTING_CODE/Logger/compile.sh" beforeDir="false" afterPath="$PROJECT_DIR$/TESTING_CODE/Logger/compile.sh" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -75,7 +77,8 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "D:/CS305/Mini_Project",
+    "aspect.path.notification.shown": "true",
+    "last_opened_file_path": "/home/vishnusai/3sem2/SE/AspectJ_Project1/AspectJ_Main_Project_CS305",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -88,7 +91,7 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Gradle.AspectJ_Main_Project_CS305 [build]">
     <configuration name="AspectJ_Main_Project_CS305 [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -108,6 +111,7 @@
       <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
       <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
       <DebugAllEnabled>false</DebugAllEnabled>
+      <ForceTestExec>false</ForceTestExec>
       <method v="2" />
     </configuration>
     <configuration name="AspectJ_Main_Project_CS305 [clean]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
@@ -129,6 +133,7 @@
       <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
       <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
       <DebugAllEnabled>false</DebugAllEnabled>
+      <ForceTestExec>false</ForceTestExec>
       <method v="2" />
     </configuration>
     <recent_temporary>
@@ -150,6 +155,7 @@
       <workItem from="1681476370153" duration="2558000" />
       <workItem from="1681530292772" duration="16313000" />
       <workItem from="1681557222415" duration="3548000" />
+      <workItem from="1682277664624" duration="1431000" />
     </task>
     <task id="LOCAL-00001" summary="Added Auto Compilation and aspectjrt.jar addition in weaved classes">
       <created>1681559478698</created>
