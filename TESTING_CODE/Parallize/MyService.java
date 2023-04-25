@@ -6,9 +6,13 @@ public class MyService {
     @Parallize
     public Future<Integer> method1() {
         try {
-            Thread.sleep(500);
-            System.out.println("COMPLETED METHOD1 SLEEP");
-            Future res = CompletableFuture.completedFuture(10);
+            Thread.sleep(1000);
+            int ans=0;
+            for(int i=1;i<=200;i++){
+                System.out.println("METHOD 1 :"+i);
+                ans+=i;
+            }
+            Future res = CompletableFuture.completedFuture(ans);
             return res;
         } catch (Exception e) {
             e.printStackTrace();
@@ -20,8 +24,13 @@ public class MyService {
     public Future<Integer> method2() {
         try {
             Thread.sleep(1000);
-            System.out.println("COMPLETED METHOD2 SLEEP");
-            Future res = CompletableFuture.completedFuture(2);
+            int ans=0;
+            for(int i=1;i<=100;i++){
+                System.out.println("METHOD 2 :"+i);
+                ans+=i;
+            }
+
+            Future res = CompletableFuture.completedFuture(ans);
             return res;
         } catch (Exception e) {
             e.printStackTrace();
@@ -29,7 +38,6 @@ public class MyService {
         }
     }
 
-    @Parallize
     public void method3() {
         try {
             long startTime = System.currentTimeMillis();

@@ -11,6 +11,13 @@ public class MyService {
 
     @MeasureExecutionTime
     public int method2() {
+        // sleeep
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        
         int a=0;
         for(int i=0;i<100000;i++){
             a+=i;
