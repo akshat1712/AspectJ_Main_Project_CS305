@@ -1,5 +1,6 @@
 // MyService.java
 
+@InstanceLog
 public class MyService {
 
     public String name,email;
@@ -14,11 +15,6 @@ public class MyService {
     public void method2(){
         email="JANJU2025@gmail.com";
         return;
-    }
-
-    @Logger
-    public void method4() throws Exception{
-        throw new Exception();
     }
 
     @Logger
@@ -43,4 +39,10 @@ public class MyService {
         return;
 
     }
+    
+    @Logger
+    public void method4() throws Exception{
+        throw new Exception();
+    }
+
 }

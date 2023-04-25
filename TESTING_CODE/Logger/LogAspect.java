@@ -18,7 +18,7 @@ public class LogAspect {
     static int depth=0;
 
     @Before("@annotation(Logger) && execution(* *(..))")
-    public void LogMethodBefore(JoinPoint joinPoint) {
+    public void LogMethodEntry(JoinPoint joinPoint) {
         depth+=1;
 
         Object[] args = joinPoint.getArgs();
@@ -47,7 +47,7 @@ public class LogAspect {
     }
 
     @AfterReturning(pointcut = "@annotation(Logger) && execution(* *(..))", returning = "result")
-    public void LogMethodAfter(JoinPoint joinPoint, Object result) {
+    public void LogMethodReturn(JoinPoint joinPoint, Object result) {
 
         printLogMessage("Exiting "+joinPoint.getSignature().getName());
 
@@ -62,7 +62,7 @@ public class LogAspect {
     }
 
     @AfterThrowing(pointcut = "@annotation(Logger) && execution(* *(..))", throwing = "ex")
-    public void logException(JoinPoint joinPoint, Exception ex) throws Exception {
+    public void logMethodException(JoinPoint joinPoint, Exception ex) throws Exception {
         
         String message= "Exception caught in "+joinPoint.getSignature().getName()+" of CLASS "+joinPoint.getTarget().getClass().getName();
         
@@ -86,7 +86,7 @@ public class LogAspect {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        printLogMessage("FIELD " + fieldName + " Accessed of CLASS " + className);
+        // printLogMessage("FIELD " + fieldName + " Accessed of CLASS " + className);
         printLogMessage("Value of FIELD " + fieldName + " of CLASS "+className+ " Before Setting is " + value);
     }
 
@@ -123,6 +123,12 @@ public class LogAspect {
 
         printLogMessage("Accessed FIELD " + fieldName + " " + value+" of CLASS "+className);
     }
+
+    @Before("within(MyService) &&  execution(new(..))")
+    public void logInstantiation( JoinPoint joinPoint ) {
+        printLogMessage("A new object has been instantiated! ");
+    }
+
 
     void printLogMessage(String message){
         for(int i=0;i<depth;i++){
