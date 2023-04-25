@@ -5,21 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="28a7030a-e483-4d60-b8a0-270a23fdea91" name="Changes" comment="Added Auto Compilation and aspectjrt.jar addition in weaved classes">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TESTING_CODE/Logger/ASPECT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/TESTING_CODE/Logger/ASPECT.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TESTING_CODE/Logger/CODE.jar" beforeDir="false" afterPath="$PROJECT_DIR$/TESTING_CODE/Logger/CODE.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TESTING_CODE/Logger/InstanceLog.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/TESTING_CODE/Logger/InstanceLog.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/TESTING_CODE/Logger/LogAspect.java" beforeDir="false" afterPath="$PROJECT_DIR$/TESTING_CODE/Logger/LogAspect.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TESTING_CODE/Logger/Logger.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/TESTING_CODE/Logger/Logger.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/TESTING_CODE/Logger/MyService.class" beforeDir="false" afterPath="$PROJECT_DIR$/TESTING_CODE/Logger/MyService.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TESTING_CODE/Logger/MyService.java" beforeDir="false" afterPath="$PROJECT_DIR$/TESTING_CODE/Logger/MyService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TESTING_CODE/Logger/compile.sh" beforeDir="false" afterPath="$PROJECT_DIR$/TESTING_CODE/Logger/compile.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TESTING_CODE/Logger/error.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/TESTING_CODE/MeasureExecutionTime/ASPECT.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/TESTING_CODE/MeasureExecutionTime/CODE.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/TESTING_CODE/MeasureExecutionTime/Main.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/TESTING_CODE/MeasureExecutionTime/MeasureExecutionTime.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/TESTING_CODE/MeasureExecutionTime/MyService$AjcClosure1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/TESTING_CODE/MeasureExecutionTime/MyService$AjcClosure3.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/TESTING_CODE/MeasureExecutionTime/MyService.class" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
