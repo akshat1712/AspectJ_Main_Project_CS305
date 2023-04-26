@@ -4,12 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="28a7030a-e483-4d60-b8a0-270a23fdea91" name="Changes" comment="Added Auto Compilation and aspectjrt.jar addition in weaved classes">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/jlogger/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jlogger/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/jlogger/logger/Weaver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jlogger/logger/Weaver.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/LoggingAspect.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/LoggingAspect.java" afterDir="false" />
-    </list>
+    <list default="true" id="28a7030a-e483-4d60-b8a0-270a23fdea91" name="Changes" comment="Added Auto Compilation and aspectjrt.jar addition in weaved classes" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
