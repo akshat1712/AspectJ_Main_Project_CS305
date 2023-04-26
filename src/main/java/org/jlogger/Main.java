@@ -12,13 +12,13 @@ public class Main {
         ArrayList<String> fieldsGetRegex = new ArrayList<>();
 
         methodsRegex.add("*(..)");
-        fieldsGetRegex.add("MyService.*");
-        fieldsSetRegex.add("MyService.*");
+        fieldsGetRegex.add("*.*");
+        fieldsSetRegex.add("*.*");
 
 
-        weaver.weaveMethodExecutionTime(methodsRegex);
-        boolean t =weaver.weaveLogging(methodsRegex,fieldsSetRegex,fieldsGetRegex);
-        System.out.println(t);
+//        weaver.weaveMethodExecutionTime(methodsRegex);
+////        weaver.jarInputPath= "input_weaved.jar";
+        weaver.weaveLogging(methodsRegex,fieldsSetRegex,fieldsGetRegex);
 
 
 

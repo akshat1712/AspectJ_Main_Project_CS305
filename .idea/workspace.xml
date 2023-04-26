@@ -4,7 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="28a7030a-e483-4d60-b8a0-270a23fdea91" name="Changes" comment="Added Auto Compilation and aspectjrt.jar addition in weaved classes" />
+    <list default="true" id="28a7030a-e483-4d60-b8a0-270a23fdea91" name="Changes" comment="Added Auto Compilation and aspectjrt.jar addition in weaved classes">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/jlogger/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jlogger/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/LoggingAspect.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/LoggingAspect.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -134,6 +138,10 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
+    <configuration name="input.jar" type="JarApplication" temporary="true">
+      <option name="JAR_PATH" value="$PROJECT_DIR$/input.jar" />
+      <method v="2" />
+    </configuration>
     <configuration name="weaved.jar" type="JarApplication" temporary="true">
       <option name="JAR_PATH" value="$PROJECT_DIR$/weaved.jar" />
       <method v="2" />
@@ -141,6 +149,7 @@
     <recent_temporary>
       <list>
         <item itemvalue="JAR Application.weaved.jar" />
+        <item itemvalue="JAR Application.input.jar" />
         <item itemvalue="Gradle.AspectJ_Main_Project_CS305 [build]" />
         <item itemvalue="Gradle.AspectJ_Main_Project_CS305 [clean]" />
       </list>
