@@ -173,6 +173,7 @@ public class Weaver {
         try {
             ClassLoader classLoader = Weaver.class.getClassLoader();
             InputStream inputStream = classLoader.getResourceAsStream("aspectjrt.jar");
+            System.out.println("INPUTSTREAM : "+inputStream);
             //Copy this file to working directory first
             java.nio.file.Files.copy(inputStream, new java.io.File(workDir + System.getProperty("file.separator") + "aspectjrt.jar").toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
             String inputJarPath = this.lastWeavedJarPath;

@@ -21,18 +21,22 @@ public class ExecutionTime implements Callable<Integer> {
     private String logFile;
     @CommandLine.Option(names = {"-a", "--aspect"}, description = "Add aspectjrt to path")
     private boolean aspect;
-    @CommandLine.Parameters(index = "0", description = "Path to the jar file to be weaved", defaultValue = "", interactive = true, prompt = "Enter path to jar file")
+    @CommandLine.Option(names = {"-i", "--input"}, description = "Path to the jar file to be weaved", defaultValue = "")
     private String inputFile;
-    @CommandLine.Parameters(index = "1", description = "Path to the output file", defaultValue = "weaved.jar", interactive = true, prompt = "Enter path to output jar file: ", showDefaultValue = CommandLine.Help.Visibility.ALWAYS)
+    @CommandLine.Option(names = {"-o", "--output"}, description = "Path to the output file", defaultValue = "weaved.jar")
     private String outputFile;
     @Override
     public Integer call() throws Exception {
         Weaver weaver = new Weaver(logFile, inputFile);
+
+        System.out.println(logFile+" : "+ inputFile+" : "+ outputFile);
+
         ArrayList<String> methodsRegex = new ArrayList<>();
 
         for (String method : methods) {
             methodsRegex.add(method);
         }
+
         weaver.weaveMethodExecutionTime(methodsRegex);
         if (aspect) {
             weaver.extractAspectjrtToJar();

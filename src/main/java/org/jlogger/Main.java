@@ -1,4 +1,3 @@
-<<<<<<< Updated upstream
 package org.jlogger;
 
 import picocli.CommandLine;
@@ -27,34 +26,4 @@ public class Main implements Callable<Integer> {
         System.out.println("Use --help for more information");
         return 0;
     }
-=======
-package org.jlogger;
-
-import org.jlogger.logger.Weaver;
-
-import java.util.ArrayList;
-
-public class Main {
-    public static void main(String[] args) {
-        Weaver weaver = new Weaver("profiler.txt", "input.jar");
-        ArrayList<String> methodsRegex = new ArrayList<>();
-        ArrayList<String> fieldsSetRegex = new ArrayList<>();
-        ArrayList<String> fieldsGetRegex = new ArrayList<>();
-
-        methodsRegex.add("*(..)");
-        fieldsGetRegex.add("MyService.*");
-        fieldsSetRegex.add("MyService.*");
-
-//        weaver.weaverMethodProfiler(methodsRegex);
-//        weaver.weaverParallelize(methodsRegex);
-//        weaver.weaveMethodExecutionTime(methodsRegex);
-//        weaver.jarInputPath= "input_weaved.jar";
-        weaver.weaveLogging(methodsRegex,fieldsSetRegex,fieldsGetRegex);
-
-
-
-        weaver.extractAspectjrtToJar();
-        weaver.saveWeavedJar("weaved.jar");
-    }
->>>>>>> Stashed changes
 }
