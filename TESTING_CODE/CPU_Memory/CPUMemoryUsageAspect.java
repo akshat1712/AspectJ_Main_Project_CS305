@@ -13,9 +13,23 @@ import java.lang.management.MemoryMXBean;
 import java.lang.management.MemoryUsage;
 import com.sun.management.OperatingSystemMXBean;
 
+
+import java.io.PrintWriter
 @Aspect
 public class CPUMemoryUsageAspect {
-
+    PrintWriter writer;
+    public ExecutionTimeAspect() {
+        try {
+            String logFileName = "${logFileName}";
+            if (logFileName != null && !logFileName.isEmpty()) {
+                writer = new PrintWriter(new FileWriter(logFileName, true));
+            } else {
+                writer = new PrintWriter(System.out);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     @Around("@annotation(CPUMemoryUsage) && execution(* *(..))")
     public Object wrap(final ProceedingJoinPoint point) throws Throwable{
 
@@ -37,9 +51,16 @@ public class CPUMemoryUsageAspect {
 
             System.gc();
 
-            System.out.println("Memory Used ( Heap ) in Mb:"+(endMemory-startMemory)/factor);
+            String memoryUsed = "Memory Used ( Heap ) in Mb:"+(endMemory-startMemory)/factor;
+            printProfiler(memoryUsed);
 
+            long elapsedProcessCpuTime = currProcessCpuTime - prevProcessCpuTime;
+            long elapsedUpTime = currUpTime - prevUpTime;
 
+            double cpuUsage = (elapsedProcessCpuTime / (elapsedUpTime * 1.0 * osBean.getAvailableProcessors())) * 100.0;
+
+            String cpuUsed = "CPU Usage: " + String.format("%.5f", cpuUsage) + "%";
+            printProfiler(cpuUsed);
             // System.out.println("Heap Memory Init: " + heapUsage.getInit()/factor + "  Mb");
             // System.out.println("Heap Memory Used: " + heapUsage.getUsed()/factor + "  Mb");
             // System.out.println("Heap Memory Committed: " + heapUsage.getCommitted()/factor + "  Mb");
@@ -58,5 +79,10 @@ public class CPUMemoryUsageAspect {
 
         return ret;
 
+    }
+
+    void printProfiler(String arg){
+        writer.println(arg);
+        writer.flush();
     }
 }

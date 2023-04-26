@@ -3,7 +3,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class MyService {
 
-    @Parallize
+    @Parallelize
     public Future<Integer> method1() {
         try {
             Thread.sleep(1000);
@@ -20,7 +20,7 @@ public class MyService {
         }
     }
 
-    @Parallize
+    @Parallelize
     public Future<Integer> method2() {
         try {
             Thread.sleep(1000);
