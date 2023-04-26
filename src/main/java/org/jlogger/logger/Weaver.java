@@ -159,6 +159,31 @@ public class Weaver {
             return false;
         }
     }
+
+    public boolean weaverCaching(ArrayList<String> methodsRegex) {
+        try {
+            // Get the file contents of ExecutionTimeAspect.aj from the resources folder
+            InputStream cachingAspect = Weaver.class.getClassLoader().getResourceAsStream("CachingAspect.java");
+
+            String cachingAspectContents = new String(cachingAspect.readAllBytes());
+            // Replace the placeholder in the aspect with the log file path
+
+            cachingAspectContents = cachingAspectContents.replace("${logFileName}", logFilePath);
+            cachingAspectContents = cachingAspectContents.replace("${MethodNames}", prepareFinalRegex(methodsRegex,aroundMethodPlaceHolder));
+
+            // Write the modified aspect to the temp directory
+            FileWriter writer = new FileWriter(workDir + System.getProperty("file.separator") + "CachingAspect.java");
+            writer.write(cachingAspectContents);
+            writer.close();
+            String outputFileName = this.jarInputPath.replace(".jar", "_weaved.jar");
+            weaveJarFile(jarInputPath, workDir + System.getProperty("file.separator") + "CachingAspect.java", workDir + System.getProperty("file.separator") + outputFileName);
+            this.lastWeavedJarPath = workDir + System.getProperty("file.separator") + outputFileName;
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
     public boolean saveWeavedJar(String path) {
         try {
             java.nio.file.Files.copy(new java.io.File(this.lastWeavedJarPath).toPath(), new java.io.File(path).toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
