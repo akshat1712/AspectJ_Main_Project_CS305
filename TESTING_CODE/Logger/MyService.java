@@ -2,27 +2,22 @@
 
 public class MyService {
 
-    @LogVariable
+
     public String name;
     public String email;
 
-    // write a constructor
-
-
-    @LogMethod
     public int[] method1( int num[],int a){
 
         name="JANJU";
+        System.out.println("Method 1");
         return num;
     }
-    
-    @LogMethod
+
     public void method2(){
         email="JANJU2025@gmail.com";
         return;
     }
 
-    @LogMethod
     public void method3() {
         name="John";
         email="123@gmail.com";
@@ -44,8 +39,7 @@ public class MyService {
         return;
 
     }
-    
-    @LogMethod
+
     public void method4() throws Exception{
         throw new Exception();
     }

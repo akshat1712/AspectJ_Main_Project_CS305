@@ -12,7 +12,6 @@ import java.lang.Exception;
 @Aspect
 public class LoggingAspect {
 
-
     static int depth=0;
 
 //    PrintWriter writer;

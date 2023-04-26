@@ -44,5 +44,5 @@ bin/
 .DS_Store
 
 *.class
-*.jar
+*.jar*
 *.txt

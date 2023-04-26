@@ -17,66 +17,62 @@ public class LogAspect {
 
     static int depth=0;
 
-    // @Before("@annotation(LogMethod) && execution(* *(..))")
-    @Before( "execution(* MyService.*(..))" )
-    public void LogMethodEntry(JoinPoint joinPoint) {
-        depth+=1;
+    // @Before( "execution(* MyService.*(..))" )
+    // public void LogMethodEntry(JoinPoint joinPoint) {
+    //     depth+=1;
 
-        Object[] args = joinPoint.getArgs();
+    //     Object[] args = joinPoint.getArgs();
 
-        if (args.length == 0) {
-            printLogMessage("Entering "+ joinPoint.getSignature().getName()+" With No arguments");
-            return;
-        }
+    //     if (args.length == 0) {
+    //         printLogMessage("Entering "+ joinPoint.getSignature().getName()+" With No arguments");
+    //         return;
+    //     }
 
-        printLogMessage("Entering "+ joinPoint.getSignature().getName()+" With Following arguments");
+    //     printLogMessage("Entering "+ joinPoint.getSignature().getName()+" With Following arguments");
 
-        MethodSignature signature = (MethodSignature) joinPoint.getSignature();
-        String[] parameterNames = signature.getParameterNames();
+    //     MethodSignature signature = (MethodSignature) joinPoint.getSignature();
+    //     String[] parameterNames = signature.getParameterNames();
 
-        for (int i = 0; i < args.length; i++) {
+    //     for (int i = 0; i < args.length; i++) {
             
-            String type=getTypeName(args[i]);
+    //         String type=getTypeName(args[i]);
             
-            if(type==null)
-                printLogMessage("Arguement "+ parameterNames[i]+": "+args[i]);            
-            else
-                printLogMessage("Arguement "+ parameterNames[i]+" of TYPE "+type);
+    //         if(type==null)
+    //             printLogMessage("Arguement "+ parameterNames[i]+": "+args[i]);            
+    //         else
+    //             printLogMessage("Arguement "+ parameterNames[i]+" of TYPE "+type);
 
-        }
+    //     }
 
-    }
+    // }
 
-    // @AfterReturning(pointcut = "@annotation(LogMethod) && execution(* *(..))", returning = "result")
-    @AfterReturning( pointcut="execution(* MyService.*(..))", returning = "result" )
-    public void LogMethodReturn(JoinPoint joinPoint, Object result) {
+    // @AfterReturning( pointcut="execution(* MyService.*(..))", returning = "result" )
+    // public void LogMethodReturn(JoinPoint joinPoint, Object result) {
 
-        printLogMessage("Exiting "+joinPoint.getSignature().getName());
+    //     printLogMessage("Exiting "+joinPoint.getSignature().getName());
 
-        String type=getTypeName(result);
+    //     String type=getTypeName(result);
 
-        if(type==null)
-            printLogMessage("Returned value of " + joinPoint.getSignature().getName() + ": " + result);
-        else
-            printLogMessage("Returned value of " + joinPoint.getSignature().getName() + " of TYPE "+type);
+    //     if(type==null)
+    //         printLogMessage("Returned value of " + joinPoint.getSignature().getName() + ": " + result);
+    //     else
+    //         printLogMessage("Returned value of " + joinPoint.getSignature().getName() + " of TYPE "+type);
 
-        depth-=1;
-    }
+    //     depth-=1;
+    // }
 
-    // @AfterThrowing(pointcut = "@annotation(LogMethod) && execution(* *(..))", throwing = "ex")
-    @AfterThrowing(pointcut="execution(* MyService.*(..))", throwing = "ex")
-    public void logMethodException(JoinPoint joinPoint, Exception ex) throws Exception {
+    // @AfterThrowing(pointcut="execution(* MyService.*(..))", throwing = "ex")
+    // public void logMethodException(JoinPoint joinPoint, Exception ex) throws Exception {
         
-        String message= "Exception caught in "+joinPoint.getSignature().getName()+" of CLASS "+joinPoint.getTarget().getClass().getName();
+    //     String message= "Exception caught in "+joinPoint.getSignature().getName()+" of CLASS "+joinPoint.getTarget().getClass().getName();
         
-        printLogMessage(message);
+    //     printLogMessage(message);
 
-        depth-=1;
-        throw ex;
-    }
+    //     depth-=1;
+    //     throw ex;
+    // }
 
-    // @Before("@annotation(LogVariable) && set(* *.*)")
-    @Before("set(* MyService.*)")
+    @Before(" !within(LogAspect) && set(* *.*) ")
     public void LogFieldBeforeSet(JoinPoint joinPoint) {
 
         // System.out.println(joinPoint.getSignature().getName());
@@ -94,8 +90,7 @@ public class LogAspect {
         printLogMessage("Value of FIELD " + fieldName + " of CLASS "+className+ " Before Setting is " + value);
     }
 
-    // @After("@annotation(LogVariable) && set(* *.*)")
-    @After("set(* MyService.*)")
+    @After(" !within(LogAspect) && set(* *.*)")
     public void LogFieldAfterSet(JoinPoint joinPoint) {
 
         String fieldName = joinPoint.getSignature().getName();
@@ -113,8 +108,7 @@ public class LogAspect {
         printLogMessage("Value of FIELD " + fieldName + " of CLASS "+className+ " After Setting is " + value);
     }
 
-    // @Before("@annotation(LogVariable) && get(* *.*)")
-    @Before("get(* MyService.*)")
+    @Before("!within(LogAspect) && get(* *.*)")
     public void LogFieldGet(JoinPoint joinPoint) {
         String fieldName = joinPoint.getSignature().getName();
         Object value = null;
@@ -130,12 +124,12 @@ public class LogAspect {
         printLogMessage("Accessed FIELD " + fieldName + " " + value+" of CLASS "+className);
     }
 
-    @Before("within(MyService) &&  execution(new(..))")
-    public void logInstantiation( JoinPoint joinPoint ) {
-        String className=joinPoint.getSignature().getDeclaringTypeName();
+    // @Before("within(MyService) &&  execution(new(..))")
+    // public void logInstantiation( JoinPoint joinPoint ) {
+    //     String className=joinPoint.getSignature().getDeclaringTypeName();
 
-        printLogMessage("Instantiated CLASS: "+className);
-    }
+    //     printLogMessage("Instantiated CLASS: "+className);
+    // }
 
 
     void printLogMessage(String message){
