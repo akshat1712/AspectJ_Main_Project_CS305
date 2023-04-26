@@ -4,12 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="28a7030a-e483-4d60-b8a0-270a23fdea91" name="Changes" comment="Added aspectjrt into resources">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/jlogger/subcommands/ExecutionTime.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+    <list default="true" id="28a7030a-e483-4d60-b8a0-270a23fdea91" name="Changes" comment="Made weaving interactive">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/jlogger/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jlogger/Main.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -209,7 +205,7 @@
       <workItem from="1681530292772" duration="16313000" />
       <workItem from="1681557222415" duration="3548000" />
       <workItem from="1682277664624" duration="1431000" />
-      <workItem from="1682467547418" duration="3750000" />
+      <workItem from="1682467547418" duration="4207000" />
     </task>
     <task id="LOCAL-00001" summary="Added Auto Compilation and aspectjrt.jar addition in weaved classes">
       <created>1681559478698</created>
@@ -218,7 +214,14 @@
       <option name="project" value="LOCAL" />
       <updated>1681559478698</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Made weaving interactive">
+      <created>1682471619790</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1682471619790</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -237,7 +240,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Added Auto Compilation and aspectjrt.jar addition in weaved classes" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added Auto Compilation and aspectjrt.jar addition in weaved classes" />
+    <MESSAGE value="Made weaving interactive" />
+    <option name="LAST_COMMIT_MESSAGE" value="Made weaving interactive" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
