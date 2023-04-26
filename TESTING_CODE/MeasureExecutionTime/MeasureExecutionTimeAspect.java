@@ -12,7 +12,7 @@ import org.aspectj.lang.annotation.After;
 @Aspect
 public class MeasureExecutionTimeAspect {
 
-    @Around("@annotation(MeasureExecutionTime) && execution(* *(..))")
+    @Around("execution(* MyService.*(..))")
     public Object wrap(final ProceedingJoinPoint point) throws Throwable{
         long start = System.currentTimeMillis();
         try {
