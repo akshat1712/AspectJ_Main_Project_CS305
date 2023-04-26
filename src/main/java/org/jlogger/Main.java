@@ -1,31 +1,29 @@
 package org.jlogger;
 
-import org.jlogger.logger.Weaver;
+import picocli.CommandLine;
+import picocli.CommandLine.Command;
+import org.jlogger.subcommands.ExecutionTime;
+import java.util.concurrent.Callable;
 
-import java.util.ArrayList;
+@Command(name = "jlogger",
+mixinStandardHelpOptions = true,
+        version = "jlogger 0.1",
+        description = "A simple tool to weave jar files",
+        subcommands = {ExecutionTime.class}
+)
 
-public class Main {
+public class Main implements Callable<Integer> {
     public static void main(String[] args) {
-        Weaver weaver = new Weaver("parallelize.txt", "input.jar");
-        ArrayList<String> methodsRegex = new ArrayList<>();
-        ArrayList<String> fieldsSetRegex = new ArrayList<>();
-        ArrayList<String> fieldsGetRegex = new ArrayList<>();
+        int exitCode = new CommandLine(new Main()).execute(args);
+        if (exitCode == 0) {
+            System.exit(0);
+        }
+        System.exit(1);
+    }
 
-        methodsRegex.add("*(..)");
-//        weaver.weaveExecutionTime(methodsRegex);
-//        weaver.weaverMethodProfiler(methodsRegex);
-        fieldsGetRegex.add("MyService.*");
-        fieldsSetRegex.add("MyService.*");
-
-        weaver.weaverParallelize(methodsRegex);
-//          weaver.weaverMethodProfiler(methodsRegex);
-//        weaver.weaveMethodExecutionTime(methodsRegex);
-//        boolean t =weaver.weaveLogging(methodsRegex,fieldsSetRegex,fieldsGetRegex);
-//        System.out.println(t);
-
-
-
-        weaver.extractAspectjrtToJar();
-        weaver.saveWeavedJar("parallelize.jar");
+    @Override
+    public Integer call() throws Exception {
+        System.out.println("Use --help for more information");
+        return 0;
     }
 }
