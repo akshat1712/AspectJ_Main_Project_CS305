@@ -17,7 +17,7 @@ import java.util.concurrent.CompletableFuture;
 @Aspect
 public class ParallizeAspect {
 
-    @Around("@annotation(Parallize) && execution(* *(..))")
+    @Around("@annotation(Parallelize) && execution(* *(..))")
     public Object wrap(final ProceedingJoinPoint point) {
 
         final ExecutorService executor = Executors.newFixedThreadPool(1);

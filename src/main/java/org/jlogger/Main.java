@@ -6,10 +6,12 @@ import java.util.ArrayList;
 
 public class Main {
     public static void main(String[] args) {
-        Weaver weaver = new Weaver("", "input.jar");
+        Weaver weaver = new Weaver("profiler.txt", "input.jar");
         ArrayList<String> methodsRegex = new ArrayList<>();
         methodsRegex.add("*(..)");
-        weaver.weaveExecutionTime(methodsRegex);
+//        weaver.weaveExecutionTime(methodsRegex);
+        weaver.weaverMethodProfiler(methodsRegex);
+//        weaver.weaverParallelize(methodsRegex);
         weaver.extractAspectjrtToJar();
         weaver.saveWeavedJar("weaved.jar");
     }

@@ -4,9 +4,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-// Defination @Parallize Annotation to be applied at RunTime 
+// Defination @Parallelize Annotation to be applied at RunTime
 // Applied to Methods Only
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface Parallize {
+public @interface Parallelize {
 }

@@ -2,7 +2,6 @@
 
 public class MyService {
 
-    @CPUMemoryUsage
     public int method1() {
         int a=0;
         for(int i=0;i<10000;i++){
@@ -11,7 +10,6 @@ public class MyService {
         return a;
     }
 
-    @CPUMemoryUsage
     public int method2() {
         int a=0;
         for(int i=0;i<10000;i++){

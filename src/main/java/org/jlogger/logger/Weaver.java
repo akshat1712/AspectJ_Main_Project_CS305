@@ -81,6 +81,55 @@ public class Weaver {
         }
     }
 
+    public boolean weaverMethodProfiler(ArrayList<String> methodsRegex) {
+        try {
+            // Get the file contents of ExecutionTimeAspect.aj from the resources folder
+            InputStream methodProfilerAspect = Weaver.class.getClassLoader().getResourceAsStream("MethodProfilerAspect.java");
+
+            String methodProfilerAspectContents = new String(methodProfilerAspect.readAllBytes());
+            // Replace the placeholder in the aspect with the log file path
+
+            methodProfilerAspectContents = methodProfilerAspectContents.replace("${logFileName}", logFilePath);
+            methodProfilerAspectContents = methodProfilerAspectContents.replace("${MethodNames}", prepareFinalRegex(methodsRegex));
+
+            // Write the modified aspect to the temp directory
+            FileWriter writer = new FileWriter(workDir + System.getProperty("file.separator") + "MethodProfilerAspect.java");
+            writer.write(methodProfilerAspectContents);
+            writer.close();
+            String outputFileName = this.jarInputPath.replace(".jar", "_weaved.jar");
+            weaveJarFile(jarInputPath, workDir + System.getProperty("file.separator") + "MethodProfilerAspect.java", workDir + System.getProperty("file.separator") + outputFileName);
+            this.lastWeavedJarPath = workDir + System.getProperty("file.separator") + outputFileName;
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public  boolean weaverParallelize(ArrayList<String> methodsRegex) {
+        try {
+            // Get the file contents of ExecutionTimeAspect.aj from the resources folder
+            InputStream parallelizeAspect = Weaver.class.getClassLoader().getResourceAsStream("ParallelizeAspect.java");
+
+            String parallelizeAspectContents = new String(parallelizeAspect.readAllBytes());
+            // Replace the placeholder in the aspect with the log file path
+
+            parallelizeAspectContents = parallelizeAspectContents.replace("${logFileName}", logFilePath);
+            parallelizeAspectContents = parallelizeAspectContents.replace("${MethodNames}", prepareFinalRegex(methodsRegex));
+
+            // Write the modified aspect to the temp directory
+            FileWriter writer = new FileWriter(workDir + System.getProperty("file.separator") + "ParallelizeAspect.java");
+            writer.write(parallelizeAspectContents);
+            writer.close();
+            String outputFileName = this.jarInputPath.replace(".jar", "_weaved.jar");
+            weaveJarFile(jarInputPath, workDir + System.getProperty("file.separator") + "ParallelizeAspect.java", workDir + System.getProperty("file.separator") + outputFileName);
+            this.lastWeavedJarPath = workDir + System.getProperty("file.separator") + outputFileName;
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
     public boolean saveWeavedJar(String path) {
         try {
             java.nio.file.Files.copy(new java.io.File(this.lastWeavedJarPath).toPath(), new java.io.File(path).toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
@@ -163,7 +212,7 @@ public class Weaver {
 
     private boolean weaveJarFile(String jarFilePath, String aspectFilePath, String outjarPath) {
         try {
-            String[] args = {"-source", "1.5", "-target", "1.5", "-inpath", jarFilePath, aspectFilePath, "-outjar", outjarPath};
+            String[] args = {"-source", "1.8", "-target", "1.8", "-inpath", jarFilePath, aspectFilePath, "-outjar", outjarPath};
             Main main = new Main();
             main.run(args, this.messageHandler);
             // Print the messages
