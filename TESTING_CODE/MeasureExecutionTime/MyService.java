@@ -1,35 +1,14 @@
 public class MyService {
 
-    @MeasureExecutionTime
     public int method1() {
-        int a=0;
-        for(int i=0;i<10000;i++){
-            a+=i;
-        }
+        int a=4;
         return a;
     }
 
-    @MeasureExecutionTime
-    public int method2() {
-        // sleeep
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        
-        int a=0;
-        for(int i=0;i<100000;i++){
-            a+=i;
-        }
-        return a;
-    }
 
-    public void method3() {
+    public void method2() {
         try {
             int res1=method1();
-            int res2=method2();
-            System.out.println("res1:"+res1+" res2:"+res2);
         } catch (Exception e) {
             e.printStackTrace();
         }
