@@ -1,5 +1,7 @@
 package org.jlogger;
 
+import org.jlogger.subcommands.MethodProfiler;
+import org.jlogger.subcommands.Parallelize;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import org.jlogger.subcommands.ExecutionTime;
@@ -9,7 +11,7 @@ import java.util.concurrent.Callable;
 mixinStandardHelpOptions = true,
         version = "jlogger 0.1",
         description = "A simple tool to weave jar files",
-        subcommands = {ExecutionTime.class}
+        subcommands = {ExecutionTime.class, MethodProfiler.class, Parallelize.class}
 )
 
 public class Main implements Callable<Integer> {
