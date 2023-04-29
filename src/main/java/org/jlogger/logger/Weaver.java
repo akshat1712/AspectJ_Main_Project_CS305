@@ -14,7 +14,7 @@ import java.util.jar.JarOutputStream;
 
 public class Weaver {
     private final String workDir = System.getProperty("user.home") + System.getProperty("file.separator") + ".jloggertemp";
-    private final String aroundMethodPlaceHolder = "execution(* $1)";
+    private final String aroundMethodPlaceHolder = "execution(* $1(..))";
     private final String aroundFieldSetPlaceHolder = "set(* $1)";
     private final String aroundFieldGetPlaceHolder = "get(* $1)";
     private final MessageHandler messageHandler;

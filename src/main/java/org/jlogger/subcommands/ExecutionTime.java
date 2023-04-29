@@ -28,15 +28,11 @@ public class ExecutionTime implements Callable<Integer> {
     @Override
     public Integer call() throws Exception {
         Weaver weaver = new Weaver(logFile, inputFile);
-
-        System.out.println(logFile+" : "+ inputFile+" : "+ outputFile);
-
         ArrayList<String> methodsRegex = new ArrayList<>();
 
         for (String method : methods) {
             methodsRegex.add(method);
         }
-
         weaver.weaveMethodExecutionTime(methodsRegex);
         if (aspect) {
             weaver.extractAspectjrtToJar();
