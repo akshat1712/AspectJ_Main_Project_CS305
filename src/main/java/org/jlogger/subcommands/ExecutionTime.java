@@ -7,15 +7,10 @@ import java.util.ArrayList;
 import java.util.concurrent.Callable;
 
 
-/**
- * This class is used to log execution time of methods
- * @author Shahnawaz Khan
- * @version 1.0
- * @since 2023-04-01
- */
-@Command(name = "time", description = "Log execution time of methods", mixinStandardHelpOptions = true, version = "time 1.0")
+
+@Command(name = "time", description = "Log execution time of methods", mixinStandardHelpOptions = true, version = "executionTime 1.0")
 public class ExecutionTime implements Callable<Integer> {
-    @CommandLine.Option(names = {"-m", "methods"}, description = "Methods to be logged", required = true, arity = "1..*", defaultValue = "*(..)", showDefaultValue = CommandLine.Help.Visibility.ALWAYS)
+    @CommandLine.Option(names = {"-m", "methods"}, description = "Methods to be logged", required = true, arity = "1..*", defaultValue = "*", showDefaultValue = CommandLine.Help.Visibility.ALWAYS)
     private String[] methods;
     @CommandLine.Option(names = {"-l", "--logfile"}, description = "Log file name", defaultValue = "")
     private String logFile;

@@ -7,12 +7,6 @@ import java.util.ArrayList;
 import java.util.concurrent.Callable;
 
 
-/**
- * This class is used to log execution time of methods
- * @author Shahnawaz Khan
- * @version 1.0
- * @since 2023-04-01
- */
 @Command(name = "parallelize", description = "Parallelize the methods with annotation", mixinStandardHelpOptions = true, version = "time 1.0")
 public class Parallelize implements Callable<Integer> {
 //  @CommandLine.Option(names = {"-m", "methods"}, description = "Methods to be parallelized", required = true, arity = "1..*", defaultValue = "*(..)", showDefaultValue = CommandLine.Help.Visibility.ALWAYS)

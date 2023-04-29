@@ -14,7 +14,7 @@ import java.util.jar.JarOutputStream;
 
 public class Weaver {
     private final String workDir = System.getProperty("user.home") + System.getProperty("file.separator") + ".jloggertemp";
-    private final String aroundMethodPlaceHolder = "execution(* $1)";
+    private final String aroundMethodPlaceHolder = "execution(* $1(..))";
     private final String aroundFieldSetPlaceHolder = "set(* $1)";
     private final String aroundFieldGetPlaceHolder = "get(* $1)";
     private final MessageHandler messageHandler;
@@ -26,6 +26,12 @@ public class Weaver {
         // If the temp directory is not present in workDir, create it
         if (!new java.io.File(workDir).exists()) {
             new java.io.File(workDir).mkdir();
+        }
+        File[] files = new java.io.File(workDir).listFiles();
+        if (files != null) {
+            for (File file : files) {
+                file.delete();
+            }
         }
         this.logFilePath = logFilePath;
         this.jarInputPath = jarInputPath;
@@ -109,7 +115,7 @@ public class Weaver {
         }
     }
 
-    public boolean weaveLogging(ArrayList <String> methodsRegex, ArrayList <String> fieldsSetRegex, ArrayList <String> fieldsGetRegex) {
+    public boolean weaveLogging(ArrayList <String> methodsRegex, ArrayList <String> fieldsRegex) {
         try {
             // Get the file contents of LoggingAspect.java from the resources folder
             InputStream LoggingAspect = Weaver.class.getClassLoader().getResourceAsStream("LoggingAspect.java");
@@ -118,8 +124,8 @@ public class Weaver {
 
             LoggingAspectContents = LoggingAspectContents.replace("${logFileName}", logFilePath);
             LoggingAspectContents = LoggingAspectContents.replace("${MethodNames}", prepareFinalRegex(methodsRegex,aroundMethodPlaceHolder));
-            LoggingAspectContents = LoggingAspectContents.replace("${FieldSetNames}", prepareFinalRegex(fieldsSetRegex,aroundFieldSetPlaceHolder));
-            LoggingAspectContents = LoggingAspectContents.replace("${FieldGetNames}", prepareFinalRegex(fieldsGetRegex,aroundFieldGetPlaceHolder));
+            LoggingAspectContents = LoggingAspectContents.replace("${FieldSetNames}", prepareFinalRegex(fieldsRegex,aroundFieldSetPlaceHolder));
+            LoggingAspectContents = LoggingAspectContents.replace("${FieldGetNames}", prepareFinalRegex(fieldsRegex,aroundFieldGetPlaceHolder));
 
             // Write the modified aspect to the temp directory
             FileWriter writer = new FileWriter(workDir + System.getProperty("file.separator") + "LoggingAspect.java");
