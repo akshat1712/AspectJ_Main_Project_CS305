@@ -66,8 +66,8 @@ public class Weaver {
 
     public boolean weaveMethodExecutionTime(ArrayList<String> methodsRegex) {
         try {
-            // Get the file contents of ExecutionTimeAspect.aj from the resources folder
-            InputStream executionTimeAspect = Weaver.class.getClassLoader().getResourceAsStream("ExecutionTimeAspect.aj");
+            // Get the file contents of ExecutionTimeAspect.java from the resources folder
+            InputStream executionTimeAspect = Weaver.class.getClassLoader().getResourceAsStream("ExecutionTimeAspect.java");
 
             String executionTimeAspectContents = new String(executionTimeAspect.readAllBytes());
             // Replace the placeholder in the aspect with the log file path
@@ -76,13 +76,16 @@ public class Weaver {
             executionTimeAspectContents = executionTimeAspectContents.replace("${MethodNames}", prepareFinalRegex(methodsRegex,aroundMethodPlaceHolder));
 
             // Write the modified aspect to the temp directory
-            FileWriter writer = new FileWriter(workDir + System.getProperty("file.separator") + "ExecutionTimeAspect.aj");
+            FileWriter writer = new FileWriter(workDir + System.getProperty("file.separator") + "ExecutionTimeAspect.java");
             writer.write(executionTimeAspectContents);
             writer.close();
 
             String outputFileName = this.jarInputPath.replace(".jar", "_weaved.jar");
-            weaveJarFile(jarInputPath, workDir + System.getProperty("file.separator") + "ExecutionTimeAspect.aj", workDir + System.getProperty("file.separator") + outputFileName);
+            weaveJarFile(jarInputPath, workDir + System.getProperty("file.separator") + "ExecutionTimeAspect.java", workDir + System.getProperty("file.separator") + outputFileName);
             this.lastWeavedJarPath = workDir + System.getProperty("file.separator") + outputFileName;
+
+            System.out.println("LAST WEAVED JAR PATH: "+this.lastWeavedJarPath);
+
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -92,7 +95,7 @@ public class Weaver {
 
     public boolean weaverMethodProfiler(ArrayList<String> methodsRegex) {
         try {
-            // Get the file contents of ExecutionTimeAspect.aj from the resources folder
+            // Get the file contents of ExecutionTimeAspect.java from the resources folder
             InputStream methodProfilerAspect = Weaver.class.getClassLoader().getResourceAsStream("MethodProfilerAspect.java");
 
             String methodProfilerAspectContents = new String(methodProfilerAspect.readAllBytes());
@@ -141,16 +144,11 @@ public class Weaver {
         }
     }
 
-    public  boolean weaverParallelize(ArrayList<String> methodsRegex) {
+    public  boolean weaverParallelize() {
         try {
-            // Get the file contents of ExecutionTimeAspect.aj from the resources folder
+            // Get the file contents of ExecutionTimeAspect.java from the resources folder
             InputStream parallelizeAspect = Weaver.class.getClassLoader().getResourceAsStream("ParallelizeAspect.java");
-
             String parallelizeAspectContents = new String(parallelizeAspect.readAllBytes());
-            // Replace the placeholder in the aspect with the log file path
-
-            parallelizeAspectContents = parallelizeAspectContents.replace("${logFileName}", logFilePath);
-            parallelizeAspectContents = parallelizeAspectContents.replace("${MethodNames}", prepareFinalRegex(methodsRegex,aroundMethodPlaceHolder));
 
             // Write the modified aspect to the temp directory
             FileWriter writer = new FileWriter(workDir + System.getProperty("file.separator") + "ParallelizeAspect.java");
@@ -168,7 +166,7 @@ public class Weaver {
 
     public boolean weaverCaching(ArrayList<String> methodsRegex) {
         try {
-            // Get the file contents of ExecutionTimeAspect.aj from the resources folder
+            // Get the file contents of ExecutionTimeAspect.java from the resources folder
             InputStream cachingAspect = Weaver.class.getClassLoader().getResourceAsStream("CachingAspect.java");
 
             String cachingAspectContents = new String(cachingAspect.readAllBytes());
@@ -278,6 +276,11 @@ public class Weaver {
 
     private boolean weaveJarFile(String jarFilePath, String aspectFilePath, String outjarPath) {
         try {
+
+            System.out.println("JARFILEPATH: "+jarFilePath);
+            System.out.println("ASPECTFILEPATH: "+aspectFilePath);
+            System.out.println("OUTJARPATH: "+outjarPath);
+
             String[] args = {"-source", "1.8", "-target", "1.8", "-inpath", jarFilePath, aspectFilePath, "-outjar", outjarPath};
             Main main = new Main();
             main.run(args, this.messageHandler);

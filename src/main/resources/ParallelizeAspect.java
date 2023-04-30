@@ -20,15 +20,17 @@ public class ParallelizeAspect {
 @Pointcut("!within(ParallelizeAspect)")
   public void excludeParallelizeAspect() {
   }
-  @Pointcut("${MethodNames}")
-  public void includeMethod() {
-  }
-  @Pointcut("@annotation(Parallelize)")
+//  @Pointcut("${MethodNames}")
+//  public void includeMethod() {
+//  }
+
+  @Pointcut("@annotation(Parallelize) && execution(* *(..))")
   public void methodAnnotatedWithParallelize() {
   }
-  @Around("methodAnnotatedWithParallelize() && excludeParallelizeAspect() && includeMethod()")
+  @Around("methodAnnotatedWithParallelize() && excludeParallelizeAspect()")
   public Object wrap(final ProceedingJoinPoint point) {
 
+    System.out.println("ParallelizeAspect.wrap()");
     final ExecutorService executor = Executors.newFixedThreadPool(1);
 
     final Class<?> returned = ((MethodSignature) point.getSignature()).getMethod().getReturnType();

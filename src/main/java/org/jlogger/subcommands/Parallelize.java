@@ -9,8 +9,7 @@ import java.util.concurrent.Callable;
 
 @Command(name = "parallelize", description = "Parallelize the methods with annotation", mixinStandardHelpOptions = true, version = "time 1.0")
 public class Parallelize implements Callable<Integer> {
-//  @CommandLine.Option(names = {"-m", "methods"}, description = "Methods to be parallelized", required = true, arity = "1..*", defaultValue = "*(..)", showDefaultValue = CommandLine.Help.Visibility.ALWAYS)
-  private String[] methods;
+
   @CommandLine.Option(names = {"-l", "--logfile"}, description = "Log file name", defaultValue = "")
   private String logFile;
   @CommandLine.Option(names = {"-a", "--aspect"}, description = "Add aspectjrt to path")
@@ -24,14 +23,8 @@ public class Parallelize implements Callable<Integer> {
     Weaver weaver = new Weaver(logFile, inputFile);
 
     System.out.println(logFile+" : "+ inputFile+" : "+ outputFile);
+    weaver.weaverParallelize();
 
-    ArrayList<String> methodsRegex = new ArrayList<>();
-
-    for (String method : methods) {
-      methodsRegex.add(method);
-    }
-
-    weaver.weaverParallelize(methodsRegex);
     if (aspect) {
       weaver.extractAspectjrtToJar();
     }

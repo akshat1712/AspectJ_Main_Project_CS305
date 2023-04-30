@@ -5,7 +5,8 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.AfterThrowing;
-
+import java.io.PrintWriter;
+import java.io.FileWriter;
 
 import java.lang.Exception;
 
@@ -14,20 +15,19 @@ public class LoggingAspect {
 
     static int depth=0;
 
-//    PrintWriter writer;
-//    public MethodLoggingAspect() {
-//        try {
-//                String logFileName = "${logFileName}";
-//                if (logFileName != null && !logFileName.isEmpty()) {
-//                    writer = new PrintWriter(new FileWriter(logFileName, true));
-//                } else {
-//                    writer = new PrintWriter(System.out);
-//                }
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//        writer = new PrintWriter(System.out);
-//    }
+    PrintWriter writer;
+    public LoggingAspect() {
+        try {
+                String logFileName = "${logFileName}";
+                if (logFileName != null && !logFileName.isEmpty()) {
+                    writer = new PrintWriter(new FileWriter(logFileName, true));
+                } else {
+                    writer = new PrintWriter(System.out);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+    }
 
 
     @Before( "${MethodNames} && !within(LoggingAspect)" )
@@ -150,15 +150,17 @@ public class LoggingAspect {
 
     void printLogMessage(String message){
 
+        writer.println("DEPTH: "+ depth);
+
         for(int i=0;i<depth;i++){
-            System.out.println("   ");
+            writer.println("   ");
         }
-        System.out.println("|");
+        writer.println("|");
         for(int i=0;i<depth;i++){
-            System.out.println("   ");
+            writer.println("   ");
         }
-        System.out.println("---> "+message);
-        System.out.flush();
+        writer.println("---> "+message);
+        writer.flush();
 
     }
 

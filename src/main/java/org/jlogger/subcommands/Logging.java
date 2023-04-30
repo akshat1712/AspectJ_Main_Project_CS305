@@ -11,7 +11,7 @@ import java.util.concurrent.Callable;
 public class Logging implements Callable<Integer> {
     @CommandLine.Option(names = {"-m", "methods"}, description = "Methods to be Logged", required = true, arity = "1..*", defaultValue = "*", showDefaultValue = CommandLine.Help.Visibility.ALWAYS)
     private String[] methods;
-    @CommandLine.Option(names = {"-v", "variables"}, description = "Variables to Log", required = true, arity = "1..*", defaultValue = "", showDefaultValue = CommandLine.Help.Visibility.ALWAYS)
+    @CommandLine.Option(names = {"-v", "variables"}, description = "Variables to be Logged", required = true, arity = "1..*", defaultValue = "", showDefaultValue = CommandLine.Help.Visibility.ALWAYS)
     private String[] variables;
     @CommandLine.Option(names = {"-l", "--logfile"}, description = "Log file name", defaultValue = "")
     private String logFile;
