@@ -9,7 +9,7 @@ import java.util.concurrent.Callable;
 
 @Command(name = "profiler", description = "Gives CPU and Memory of methods", mixinStandardHelpOptions = true, version = "methodProfiler 1.0")
 public class MethodProfiler implements Callable<Integer> {
-  @CommandLine.Option(names = {"-m", "methods"}, description = "Methods to be profiled", required = true, arity = "1..*", defaultValue = "*", showDefaultValue = CommandLine.Help.Visibility.ALWAYS)
+  @CommandLine.Option(names = {"-m", "methods"}, description = "Methods to be profiled", required = false, arity = "1..*", defaultValue = "*", showDefaultValue = CommandLine.Help.Visibility.ALWAYS)
   private String[] methods;
   @CommandLine.Option(names = {"-l", "--logfile"}, description = "Log file name", defaultValue = "")
   private String logFile;

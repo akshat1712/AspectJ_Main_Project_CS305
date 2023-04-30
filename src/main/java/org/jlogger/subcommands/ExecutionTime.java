@@ -10,7 +10,7 @@ import java.util.concurrent.Callable;
 
 @Command(name = "time", description = "Log execution time of methods", mixinStandardHelpOptions = true, version = "executionTime 1.0")
 public class ExecutionTime implements Callable<Integer> {
-    @CommandLine.Option(names = {"-m", "methods"}, description = "Methods to be logged", required = true, arity = "1..*", defaultValue = "*", showDefaultValue = CommandLine.Help.Visibility.ALWAYS)
+    @CommandLine.Option(names = {"-m", "methods"}, description = "Methods to be logged", required = false, arity = "1..*", defaultValue = "*", showDefaultValue = CommandLine.Help.Visibility.ALWAYS)
     private String[] methods;
     @CommandLine.Option(names = {"-l", "--logfile"}, description = "Log file name", defaultValue = "")
     private String logFile;

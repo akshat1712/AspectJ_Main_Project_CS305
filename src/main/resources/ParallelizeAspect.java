@@ -20,26 +20,31 @@ public class ParallelizeAspect {
 @Pointcut("!within(ParallelizeAspect)")
   public void excludeParallelizeAspect() {
   }
-//  @Pointcut("${MethodNames}")
-//  public void includeMethod() {
-//  }
 
-  @Pointcut("@annotation(Parallelize) && execution(* *(..))")
+  @Pointcut("${MethodNames}")
   public void methodAnnotatedWithParallelize() {
   }
   @Around("methodAnnotatedWithParallelize() && excludeParallelizeAspect()")
   public Object wrap(final ProceedingJoinPoint point) {
 
-    System.out.println("ParallelizeAspect.wrap()");
-    final ExecutorService executor = Executors.newFixedThreadPool(1);
-
     final Class<?> returned = ((MethodSignature) point.getSignature()).getMethod().getReturnType();
+
     if (!Future.class.isAssignableFrom(returned)
             && !returned.equals(Void.TYPE)) {
-      throw new IllegalStateException(
-              String.format("Return type is %s, not void or Future, cannot use @Parallize",returned.getCanonicalName())
-      );
+      Object res=null;
+      try {
+        res = point.proceed();
+      } catch (final Throwable ex) {
+        throw new IllegalStateException(
+                String.format("Exception thrown"),ex
+        );
+      }
+
+      return res;
     }
+
+    final ExecutorService executor = Executors.newFixedThreadPool(1);
+
     final Future<?> result = executor.submit(
             () -> {
               Object ret = null;

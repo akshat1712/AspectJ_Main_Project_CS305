@@ -11,6 +11,9 @@ import java.util.Enumeration;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.jar.JarOutputStream;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 
 public class Weaver {
     private final String workDir = System.getProperty("user.home") + System.getProperty("file.separator") + ".jloggertemp";
@@ -24,15 +27,27 @@ public class Weaver {
 
     public Weaver(String logFilePath, String jarInputPath) {
         // If the temp directory is not present in workDir, create it
-        if (!new java.io.File(workDir).exists()) {
-            new java.io.File(workDir).mkdir();
-        }
-        File[] files = new java.io.File(workDir).listFiles();
-        if (files != null) {
-            for (File file : files) {
-                file.delete();
+
+        if (new java.io.File(workDir).exists()) {
+
+            try {
+                Files.walk(Paths.get(workDir))
+                        .map(Path::toFile)
+                        .forEach(File::delete);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
+
         }
+        new java.io.File(workDir).mkdir();
+
+//        File[] files = new java.io.File(workDir).listFiles();
+//        if (files != null) {
+//            for (File file : files) {
+//                file.delete();
+//            }
+//        }
+
         this.logFilePath = logFilePath;
         this.jarInputPath = jarInputPath;
         // Create Imessage holder
@@ -144,18 +159,23 @@ public class Weaver {
         }
     }
 
-    public  boolean weaverParallelize() {
+
+    public  boolean weaverParallelize(ArrayList<String> methodsRegex) {
         try {
             // Get the file contents of ExecutionTimeAspect.java from the resources folder
             InputStream parallelizeAspect = Weaver.class.getClassLoader().getResourceAsStream("ParallelizeAspect.java");
             String parallelizeAspectContents = new String(parallelizeAspect.readAllBytes());
 
-            // Write the modified aspect to the temp directory
+            parallelizeAspectContents = parallelizeAspectContents.replace("${logFileName}", logFilePath);
+            parallelizeAspectContents = parallelizeAspectContents.replace("${MethodNames}", prepareFinalRegex(methodsRegex,aroundMethodPlaceHolder));
+
+            // Write the  aspect to the temp directory
             FileWriter writer = new FileWriter(workDir + System.getProperty("file.separator") + "ParallelizeAspect.java");
             writer.write(parallelizeAspectContents);
             writer.close();
+
             String outputFileName = this.jarInputPath.replace(".jar", "_weaved.jar");
-            weaveJarFile(jarInputPath, workDir + System.getProperty("file.separator") + "ParallelizeAspect.java", workDir + System.getProperty("file.separator") + outputFileName);
+            weaveJarFile(jarInputPath, workDir + System.getProperty("file.separator") + "ParallelizeAspect.java",workDir + System.getProperty("file.separator") + outputFileName);
             this.lastWeavedJarPath = workDir + System.getProperty("file.separator") + outputFileName;
             return true;
         } catch (Exception e) {
@@ -164,21 +184,18 @@ public class Weaver {
         }
     }
 
-    public boolean weaverCaching(ArrayList<String> methodsRegex) {
+
+    public boolean weaverCaching() {
         try {
             // Get the file contents of ExecutionTimeAspect.java from the resources folder
             InputStream cachingAspect = Weaver.class.getClassLoader().getResourceAsStream("CachingAspect.java");
-
             String cachingAspectContents = new String(cachingAspect.readAllBytes());
-            // Replace the placeholder in the aspect with the log file path
 
-            cachingAspectContents = cachingAspectContents.replace("${logFileName}", logFilePath);
-            cachingAspectContents = cachingAspectContents.replace("${MethodNames}", prepareFinalRegex(methodsRegex,aroundMethodPlaceHolder));
-
-            // Write the modified aspect to the temp directory
+            // Write the  aspect to the temp directory
             FileWriter writer = new FileWriter(workDir + System.getProperty("file.separator") + "CachingAspect.java");
             writer.write(cachingAspectContents);
             writer.close();
+
             String outputFileName = this.jarInputPath.replace(".jar", "_weaved.jar");
             weaveJarFile(jarInputPath, workDir + System.getProperty("file.separator") + "CachingAspect.java", workDir + System.getProperty("file.separator") + outputFileName);
             this.lastWeavedJarPath = workDir + System.getProperty("file.separator") + outputFileName;
@@ -188,6 +205,8 @@ public class Weaver {
             return false;
         }
     }
+
+
     public boolean saveWeavedJar(String path) {
         try {
             java.nio.file.Files.copy(new java.io.File(this.lastWeavedJarPath).toPath(), new java.io.File(path).toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
