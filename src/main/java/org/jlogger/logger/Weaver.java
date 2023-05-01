@@ -41,13 +41,6 @@ public class Weaver {
         }
         new java.io.File(workDir).mkdir();
 
-//        File[] files = new java.io.File(workDir).listFiles();
-//        if (files != null) {
-//            for (File file : files) {
-//                file.delete();
-//            }
-//        }
-
         this.logFilePath = logFilePath;
         this.jarInputPath = jarInputPath;
         // Create Imessage holder
@@ -159,7 +152,6 @@ public class Weaver {
         }
     }
 
-
     public  boolean weaverParallelize(ArrayList<String> methodsRegex) {
         try {
             // Get the file contents of ExecutionTimeAspect.java from the resources folder
@@ -184,12 +176,14 @@ public class Weaver {
         }
     }
 
-
-    public boolean weaverCaching() {
+    public boolean weaverCaching(ArrayList<String> methodsRegex) {
         try {
             // Get the file contents of ExecutionTimeAspect.java from the resources folder
             InputStream cachingAspect = Weaver.class.getClassLoader().getResourceAsStream("CachingAspect.java");
             String cachingAspectContents = new String(cachingAspect.readAllBytes());
+
+            cachingAspectContents = cachingAspectContents.replace("${logFileName}", logFilePath);
+            cachingAspectContents = cachingAspectContents.replace("${MethodNames}", prepareFinalRegex(methodsRegex,aroundMethodPlaceHolder));
 
             // Write the  aspect to the temp directory
             FileWriter writer = new FileWriter(workDir + System.getProperty("file.separator") + "CachingAspect.java");
@@ -199,13 +193,13 @@ public class Weaver {
             String outputFileName = this.jarInputPath.replace(".jar", "_weaved.jar");
             weaveJarFile(jarInputPath, workDir + System.getProperty("file.separator") + "CachingAspect.java", workDir + System.getProperty("file.separator") + outputFileName);
             this.lastWeavedJarPath = workDir + System.getProperty("file.separator") + outputFileName;
+
             return true;
         } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
     }
-
 
     public boolean saveWeavedJar(String path) {
         try {

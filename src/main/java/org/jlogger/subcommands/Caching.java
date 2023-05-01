@@ -7,8 +7,11 @@ import java.util.ArrayList;
 import java.util.concurrent.Callable;
 
 
-@Command(name = "cache", description = "Cache methods with annotation", mixinStandardHelpOptions = true, version = "cache 1.0")
+@Command(name = "caching", description = "Cache methods with annotation", mixinStandardHelpOptions = true, version = "cache 1.0")
 public class Caching implements Callable<Integer> {
+
+    @CommandLine.Option(names = {"-m", "methods"}, description = "Methods to be cached", required = true, arity = "1..*", defaultValue = "*", showDefaultValue = CommandLine.Help.Visibility.ALWAYS)
+    private String[] methods;
 
     @CommandLine.Option(names = {"-l", "--logfile"}, description = "Log file name", defaultValue = "")
     private String logFile;
@@ -22,8 +25,11 @@ public class Caching implements Callable<Integer> {
     public Integer call() throws Exception {
         Weaver weaver = new Weaver(logFile, inputFile);
 
-        System.out.println(logFile+" : "+ inputFile+" : "+ outputFile);
-        weaver.weaverCaching();
+        ArrayList<String> methodsRegex = new ArrayList<>();
+        for (String method : methods) {
+            methodsRegex.add(method);
+        }
+        weaver.weaverCaching(methodsRegex);
 
         if (aspect) {
             weaver.extractAspectjrtToJar();
