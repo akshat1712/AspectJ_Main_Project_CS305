@@ -3,6 +3,8 @@ package org.jlogger.logger;
 import org.aspectj.util.GenericSignature;
 import org.junit.jupiter.api.*;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
@@ -74,5 +76,11 @@ class WeaverTest {
     @Order(5)
     void extractAspectjrtToJar() {
         assertTrue(weaver.extractAspectjrtToJar());
+    }
+    @Test
+    @Order(6)
+    void deleteWeavedJar() throws IOException {
+        assertTrue(Files.deleteIfExists(Paths.get(System.getProperty("user.dir"),"weaved.jar")));
+        assertFalse(Paths.get(System.getProperty("user.dir"),"weaved.jar").toFile().exists());
     }
 }

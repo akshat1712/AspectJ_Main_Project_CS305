@@ -154,6 +154,8 @@ public class Weaver {
             writer.write(LoggingAspectContents);
             writer.close();
             String outputFileName = this.jarInputPath.replace(".jar", "_weaved.jar");
+            //Set output file location without full path
+            outputFileName = outputFileName.substring(outputFileName.lastIndexOf(System.getProperty("file.separator")) + 1);
             weaveJarFile(jarInputPath, workDir + System.getProperty("file.separator") + "LoggingAspect.java", workDir + System.getProperty("file.separator") + outputFileName);
             this.lastWeavedJarPath = workDir + System.getProperty("file.separator") + outputFileName;
             return true;
