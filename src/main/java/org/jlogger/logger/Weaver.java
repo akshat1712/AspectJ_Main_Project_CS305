@@ -17,9 +17,11 @@ import java.nio.file.Paths;
 
 public class Weaver {
     private final String workDir = System.getProperty("user.home") + System.getProperty("file.separator") + ".jloggertemp";
-    private final String aroundMethodPlaceHolder = "execution(* $1(..))";
-    private final String aroundFieldSetPlaceHolder = "set(* $1)";
-    private final String aroundFieldGetPlaceHolder = "get(* $1)";
+    private final String aroundMethodPlaceHolder = "execution($2 $1(..))";
+    private final String aroundFieldSetPlaceHolder = "set($2 $1)";
+    private final String aroundFieldGetPlaceHolder = "get($2 $1)";
+
+    private final String[] returnTypesArray = {"Integer","int","Long","long","Float","float","Double","double","String","Boolean","boolean","Byte","byte","Short","short","Character","char"};
     private final MessageHandler messageHandler;
     public String logFilePath;
     public String jarInputPath;
@@ -81,8 +83,8 @@ public class Weaver {
             // Replace the placeholder in the aspect with the log file path
 
             executionTimeAspectContents = executionTimeAspectContents.replace("${logFileName}", logFilePath);
-            executionTimeAspectContents = executionTimeAspectContents.replace("${MethodNames}", prepareFinalRegex(methodsRegex,aroundMethodPlaceHolder));
-            System.out.println(prepareFinalRegex(methodsRegex,aroundMethodPlaceHolder));
+            executionTimeAspectContents = executionTimeAspectContents.replace("${MethodNames}", prepareFinalRegex(methodsRegex,aroundMethodPlaceHolder,"*"));
+            System.out.println(prepareFinalRegex(methodsRegex,aroundMethodPlaceHolder,"*"));
             for (String methodRegex : methodsRegex) {
                 System.out.println("REGEX: "+methodRegex);
             }
@@ -117,7 +119,7 @@ public class Weaver {
             // Replace the placeholder in the aspect with the log file path
 
             methodProfilerAspectContents = methodProfilerAspectContents.replace("${logFileName}", logFilePath);
-            methodProfilerAspectContents = methodProfilerAspectContents.replace("${MethodNames}", prepareFinalRegex(methodsRegex,aroundMethodPlaceHolder));
+            methodProfilerAspectContents = methodProfilerAspectContents.replace("${MethodNames}", prepareFinalRegex(methodsRegex,aroundMethodPlaceHolder,"*"));
 
             // Write the modified aspect to the temp directory
             FileWriter writer = new FileWriter(workDir + System.getProperty("file.separator") + "MethodProfilerAspect.java");
@@ -143,9 +145,9 @@ public class Weaver {
             // Replace the placeholder in the aspect with the log file path
 
             LoggingAspectContents = LoggingAspectContents.replace("${logFileName}", logFilePath);
-            LoggingAspectContents = LoggingAspectContents.replace("${MethodNames}", prepareFinalRegex(methodsRegex,aroundMethodPlaceHolder));
-            LoggingAspectContents = LoggingAspectContents.replace("${FieldSetNames}", prepareFinalRegex(fieldsRegex,aroundFieldSetPlaceHolder));
-            LoggingAspectContents = LoggingAspectContents.replace("${FieldGetNames}", prepareFinalRegex(fieldsRegex,aroundFieldGetPlaceHolder));
+            LoggingAspectContents = LoggingAspectContents.replace("${MethodNames}", prepareFinalRegex(methodsRegex,aroundMethodPlaceHolder,"*"));
+            LoggingAspectContents = LoggingAspectContents.replace("${FieldSetNames}", prepareFinalRegex(fieldsRegex,aroundFieldSetPlaceHolder,"*"));
+            LoggingAspectContents = LoggingAspectContents.replace("${FieldGetNames}", prepareFinalRegex(fieldsRegex,aroundFieldGetPlaceHolder,"*"));
 
             // Write the modified aspect to the temp directory
             FileWriter writer = new FileWriter(workDir + System.getProperty("file.separator") + "LoggingAspect.java");
@@ -168,7 +170,7 @@ public class Weaver {
             String parallelizeAspectContents = new String(parallelizeAspect.readAllBytes());
 
             parallelizeAspectContents = parallelizeAspectContents.replace("${logFileName}", logFilePath);
-            parallelizeAspectContents = parallelizeAspectContents.replace("${MethodNames}", prepareFinalRegex(methodsRegex,aroundMethodPlaceHolder));
+            parallelizeAspectContents = parallelizeAspectContents.replace("${MethodNames}", prepareFinalRegex(methodsRegex,aroundMethodPlaceHolder,"*"));
 
             // Write the  aspect to the temp directory
             FileWriter writer = new FileWriter(workDir + System.getProperty("file.separator") + "ParallelizeAspect.java");
@@ -194,7 +196,12 @@ public class Weaver {
             String cachingAspectContents = new String(cachingAspect.readAllBytes());
 
             cachingAspectContents = cachingAspectContents.replace("${logFileName}", logFilePath);
-            cachingAspectContents = cachingAspectContents.replace("${MethodNames}", prepareFinalRegex(methodsRegex,aroundMethodPlaceHolder));
+
+            // loop over returnTypesArray
+            for (String returnType : returnTypesArray) {
+                String methodName = "${MethodNames" + returnType + "}";
+                cachingAspectContents = cachingAspectContents.replace(methodName, prepareFinalRegex(methodsRegex,aroundMethodPlaceHolder,returnType));
+            }
 
             // Write the  aspect to the temp directory
             FileWriter writer = new FileWriter(workDir + System.getProperty("file.separator") + "CachingAspect.java");
@@ -286,13 +293,13 @@ public class Weaver {
         }
     }
 
-    private String prepareFinalRegex(ArrayList<String> methodsRegex,String PlaceHolder) {
+    private String prepareFinalRegex(ArrayList<String> methodsRegex,String PlaceHolder,String returnType) {
 
         System.out.println(PlaceHolder);
 
         String finalRegex = "";
         for (String regex : methodsRegex) {
-            finalRegex += PlaceHolder.replace("$1", regex) + " || ";
+            finalRegex += PlaceHolder.replace("$1", regex).replace("$2",returnType) + " || ";
         }
         System.out.println(finalRegex.substring(0, finalRegex.length() - 4));
         System.out.flush();
