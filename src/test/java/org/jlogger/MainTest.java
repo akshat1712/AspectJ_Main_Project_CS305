@@ -9,7 +9,6 @@ class MainTest {
     @Test
     void main() {
     }
-
     @Test
     void call() {
     }

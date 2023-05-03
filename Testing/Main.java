@@ -5,5 +5,4 @@ import ParallelizeTest.Parallelize;
 
 public class Main {
 
-
 }

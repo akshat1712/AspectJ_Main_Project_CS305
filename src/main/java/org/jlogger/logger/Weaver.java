@@ -35,7 +35,7 @@ public class Weaver {
                         .map(Path::toFile)
                         .forEach(File::delete);
             } catch (IOException e) {
-                e.printStackTrace();
+                System.err.println("Error while deleting temp directory");
             }
 
         }
@@ -82,6 +82,10 @@ public class Weaver {
 
             executionTimeAspectContents = executionTimeAspectContents.replace("${logFileName}", logFilePath);
             executionTimeAspectContents = executionTimeAspectContents.replace("${MethodNames}", prepareFinalRegex(methodsRegex,aroundMethodPlaceHolder));
+            System.out.println(prepareFinalRegex(methodsRegex,aroundMethodPlaceHolder));
+            for (String methodRegex : methodsRegex) {
+                System.out.println("REGEX: "+methodRegex);
+            }
 
             // Write the modified aspect to the temp directory
             FileWriter writer = new FileWriter(workDir + System.getProperty("file.separator") + "ExecutionTimeAspect.java");
@@ -89,6 +93,9 @@ public class Weaver {
             writer.close();
 
             String outputFileName = this.jarInputPath.replace(".jar", "_weaved.jar");
+            //Set output file location without full path
+            outputFileName = outputFileName.substring(outputFileName.lastIndexOf(System.getProperty("file.separator")) + 1);
+            System.out.println("Output file name: "+outputFileName);
             weaveJarFile(jarInputPath, workDir + System.getProperty("file.separator") + "ExecutionTimeAspect.java", workDir + System.getProperty("file.separator") + outputFileName);
             this.lastWeavedJarPath = workDir + System.getProperty("file.separator") + outputFileName;
 
@@ -96,7 +103,7 @@ public class Weaver {
 
             return true;
         } catch (Exception e) {
-            e.printStackTrace();
+            System.err.println("Some unexpected error occurred while weaving the jar. Check the method names and try again");
             return false;
         }
     }
@@ -117,6 +124,8 @@ public class Weaver {
             writer.write(methodProfilerAspectContents);
             writer.close();
             String outputFileName = this.jarInputPath.replace(".jar", "_weaved.jar");
+            //Set output file location without full path
+            outputFileName = outputFileName.substring(outputFileName.lastIndexOf(System.getProperty("file.separator")) + 1);
             weaveJarFile(jarInputPath, workDir + System.getProperty("file.separator") + "MethodProfilerAspect.java", workDir + System.getProperty("file.separator") + outputFileName);
             this.lastWeavedJarPath = workDir + System.getProperty("file.separator") + outputFileName;
             return true;
@@ -167,6 +176,8 @@ public class Weaver {
             writer.close();
 
             String outputFileName = this.jarInputPath.replace(".jar", "_weaved.jar");
+            //Set output file location without full path
+            outputFileName = outputFileName.substring(outputFileName.lastIndexOf(System.getProperty("file.separator")) + 1);
             weaveJarFile(jarInputPath, workDir + System.getProperty("file.separator") + "ParallelizeAspect.java",workDir + System.getProperty("file.separator") + outputFileName);
             this.lastWeavedJarPath = workDir + System.getProperty("file.separator") + outputFileName;
             return true;
@@ -191,6 +202,8 @@ public class Weaver {
             writer.close();
 
             String outputFileName = this.jarInputPath.replace(".jar", "_weaved.jar");
+            //Set output file location without full path
+            outputFileName = outputFileName.substring(outputFileName.lastIndexOf(System.getProperty("file.separator")) + 1);
             weaveJarFile(jarInputPath, workDir + System.getProperty("file.separator") + "CachingAspect.java", workDir + System.getProperty("file.separator") + outputFileName);
             this.lastWeavedJarPath = workDir + System.getProperty("file.separator") + outputFileName;
 
