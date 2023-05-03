@@ -1,118 +1,117 @@
-import java.io.FileWriter;
-import java.io.PrintWriter;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.reflect.MethodSignature;
+
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+
 
 @Aspect
 public class CachingAspect {
 
+  GenericCacheHandlerAspect<Integer> integerCacheHandlerAspect = new GenericCacheHandlerAspect<Integer>();
+  GenericCacheHandlerAspect<String> stringCacheHandlerAspect = new GenericCacheHandlerAspect<String>();
+  GenericCacheHandlerAspect<Double> doubleCacheHandlerAspect = new GenericCacheHandlerAspect<Double>();
+  GenericCacheHandlerAspect<Long> longCacheHandlerAspect = new GenericCacheHandlerAspect<Long>();
+  GenericCacheHandlerAspect<Boolean> booleanCacheHandlerAspect = new GenericCacheHandlerAspect<Boolean>();
+  GenericCacheHandlerAspect<Byte> byteCacheHandlerAspect = new GenericCacheHandlerAspect<Byte>();
+  GenericCacheHandlerAspect<Character> charCacheHandlerAspect = new GenericCacheHandlerAspect<Character>();
+  GenericCacheHandlerAspect<Short> shortCacheHandlerAspect = new GenericCacheHandlerAspect<Short>();
+  GenericCacheHandlerAspect<Float> floatCacheHandlerAspect = new GenericCacheHandlerAspect<Float>();
 
-  PrintWriter writer;
-  public CachingAspect() {
-    try {
-      String logFileName = "${logFileName}";
-      if (logFileName != null && !logFileName.isEmpty()) {
-        writer = new PrintWriter(new FileWriter(logFileName, true));
-      } else {
-        writer = new PrintWriter(System.out);
+  @Pointcut("!within(CachingAspect)")
+  public void excludeAspectfile() {
+  }
+
+  //Around for methods which return Integer
+  @Around("execution(Integer *(..)) && excludeAspectfile()")
+  public Integer wrapInteger(final ProceedingJoinPoint point) {
+    return integerCacheHandlerAspect.cachedToFunctionCalls(point);
+  }
+
+
+
+
+  //Around for methods which return String
+  @Around("execution(String *(..)) && excludeAspectfile()")
+  public String wrapString(final ProceedingJoinPoint point) {
+    return stringCacheHandlerAspect.cachedToFunctionCalls(point);
+  }
+
+  //Around for methods which return double
+  @Around("execution(Double *(..)) && excludeAspectfile()")
+  public Double wrapDouble(final ProceedingJoinPoint point) {
+    return doubleCacheHandlerAspect.cachedToFunctionCalls(point);
+  }
+
+  //Around for methods which return long
+  @Around("execution(Long *(..)) && excludeAspectfile()")
+  public Long wrapLong(final ProceedingJoinPoint point) {
+    return longCacheHandlerAspect.cachedToFunctionCalls(point);
+  }
+
+  //Around for methods which return boolean
+  @Around("execution(Boolean *(..)) && excludeAspectfile()")
+  public Boolean wrapBoolean(final ProceedingJoinPoint point) {
+    return booleanCacheHandlerAspect.cachedToFunctionCalls(point);
+  }
+
+  //Around for methods which return byte
+  @Around("execution(Byte *(..)) && excludeAspectfile()")
+  public Byte wrapByte(final ProceedingJoinPoint point) {
+    return byteCacheHandlerAspect.cachedToFunctionCalls(point);
+  }
+
+  //Around for methods which return char
+  @Around("execution(Character *(..)) && excludeAspectfile()")
+  public Character wrapChar(final ProceedingJoinPoint point) {
+    return charCacheHandlerAspect.cachedToFunctionCalls(point);
+  }
+
+  //Around for methods which return short
+  @Around("execution(Short *(..)) && excludeAspectfile()")
+  public Short wrapShort(final ProceedingJoinPoint point) {
+    return shortCacheHandlerAspect.cachedToFunctionCalls(point);
+  }
+
+  //Around for methods which return float
+  @Around("execution(Float *(..)) && excludeAspectfile()")
+  public Float wrapFloat(final ProceedingJoinPoint point) {
+    return floatCacheHandlerAspect.cachedToFunctionCalls(point);
+  }
+
+
+
+
+  private class GenericCacheHandlerAspect<T> {
+
+    private Map<Integer, T> functionCallValues = new HashMap<>();
+
+    public T cachedToFunctionCalls(ProceedingJoinPoint thisJoinPoint) { // , cached.timeToLiveMillis()
+
+      String name = thisJoinPoint.getSignature().getName();
+      Object[] args = thisJoinPoint.getArgs();
+      String keyString = name + Arrays.toString(args);
+      Integer key = keyString.hashCode();
+
+      if (functionCallValues.containsKey(key)) { // functionCall
+        T cachedValue = (T) functionCallValues.get(key); // functionCall
+
+        return cachedValue;
       }
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-  }
 
-  // Map stores values of string returning function calls
-  // private Map<NewFunctionCall, CachedValue> stringFunctionCallValues = new HashMap<NewFunctionCall, CachedValue>();
-  private Map<Integer, CachedValue> stringFunctionCallValues = new HashMap<Integer, CachedValue>();
+      Object value = thisJoinPoint.proceed();
+      T cachedValue = (T) value;
+      // , cached.timeToLiveMillis()
+      functionCallValues.put(key, cachedValue); // functionCall
 
 
-  // This pointcut matches any call to a method that returns a String and is annotated
-  @Pointcut("execution(@Cached public String *.*(..)) && @annotation(Cached)")
-  public void cachedPointCut() {} // Cached cached
-
-  // We'll use around advice to replace above matched function calls with cache
-  // checking, where we see if a non-expired value is already available
-  // in the cache and return that in lieu of calling the method.
-  @Around(value = "cachedPointCut()") // , argNames = "cached"
-  public String cachedToStringCalls(ProceedingJoinPoint thisJoinPoint) { // , cached.timeToLiveMillis()
-
-    String name = thisJoinPoint.getSignature().getName();
-    Object[] args = thisJoinPoint.getArgs();
-    String keyString = name + Arrays.toString(args);
-    Integer key = keyString.hashCode();
-
-    // NewFunctionCall functionCall = new NewFunctionCall(name, args);
-
-    // If there is already a value in the cache for the NewFunctionCall in
-    // question, check if it has expired; if not, return it.
-    if (stringFunctionCallValues.containsKey(key)) { // functionCall
-      CachedValue cachedValue = stringFunctionCallValues.get(key); // functionCall
-      printMessage("Key exists, taken from cache");
-
-      // if (cachedValue.expirationTimeMillis <= System.currentTimeMillis()) {
-      //     return cachedValue.value;
-      // }
-
-      return cachedValue.value;
+      return (T) value;
     }
 
-    // If there is no value in the cache, or if the value in the
-    // cache has expired, then we'll need to call the original
-    // method and save the result in the cache before returning it.
-    Object value = thisJoinPoint.proceed();
-    CachedValue cachedValue = new CachedValue((String) value);
-    // , cached.timeToLiveMillis()
-    stringFunctionCallValues.put(key, cachedValue); // functionCall
-      printMessage("Key does not exist, put in cache");
-
-    for (Map.Entry<Integer, CachedValue> entry : stringFunctionCallValues.entrySet()) {
-      Integer key1 = entry.getKey();
-      CachedValue cachedValue1 = entry.getValue();
-      System.out.println(key + " -> " + cachedValue1);
-    }
-
-    return (String) value;
-  }
-
-  public void printMessage(String message) {
-    writer.println(message);
-    writer.flush();
-  }
-
-  // The CachedValue class combines a value with its expiration time,
-  // expressed as a number of milliseconds since the Unix epoch -- the
-  // same way that Java expresses the current time internally.
-
-  // This is the value in the HashMap: a cached string value and its expiration time.
-  private static class CachedValue {
-    public String value;
-    // public long expirationTimeMillis;
-
-    // When we create a CachedValue, we'll take the time to live and
-    // add it to the current time to calculate its expiration time.
-    public CachedValue(String value) { // , int timeToLiveMillis
-      this.value = value;
-
-      // expirationTimeMillis =
-      //     System.currentTimeMillis() + timeToLiveMillis;
-    }
-  }
-
-  private class NewFunctionCall {
-
-    private String name;
-    private Object[] args;
-
-    public NewFunctionCall(String name, Object[] args) {
-      this.name = name;
-      this.args = args;
-    }
   }
 
 }
