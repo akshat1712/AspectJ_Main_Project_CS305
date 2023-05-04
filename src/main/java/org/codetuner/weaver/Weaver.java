@@ -1,4 +1,4 @@
-package org.jlogger.logger;
+package org.codetuner.weaver;
 
 import org.aspectj.bridge.IMessage;
 import org.aspectj.bridge.MessageHandler;

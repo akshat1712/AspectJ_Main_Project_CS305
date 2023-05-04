@@ -1,14 +1,14 @@
-package org.jlogger;
+package org.codetuner;
 
-import org.jlogger.subcommands.*;
+import org.codetuner.subcommands.*;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 
 import java.util.concurrent.Callable;
 
-@Command(name = "jlogger",
+@Command(name = "codetuner",
         mixinStandardHelpOptions = true,
-        version = "jlogger 0.1",
+        version = "codetuner 0.1",
         description = "A simple tool to weave jar files",
         subcommands = {ExecutionTime.class, MethodProfiler.class, Parallelize.class, Logging.class, Caching.class}
 )

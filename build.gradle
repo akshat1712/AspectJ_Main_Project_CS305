@@ -17,12 +17,12 @@ jacocoTestReport {
         classDirectories.setFrom(files(classDirectories.files.collect {
             fileTree(dir: it,
                     exclude: ['aspectjrt',
-                            '**/org/jlogger/Main.class',
+                            '**/org/codetuner/Main.class',
                               ])
         }))
     }
 }
-group 'org.jlogger'
+group 'org.codetuner'
 version '1.0-SNAPSHOT'
 
 repositories {
@@ -52,6 +52,6 @@ dependencies {
 shadowJar {
     mergeServiceFiles()
     manifest {
-        attributes 'Main-Class': 'org.jlogger.Main'
+        attributes 'Main-Class': 'org.codetuner.Main'
     }
 }

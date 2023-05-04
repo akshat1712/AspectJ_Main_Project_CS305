@@ -1,6 +1,6 @@
-package org.jlogger.subcommands;
+package org.codetuner.subcommands;
 
-import org.jlogger.logger.Weaver;
+import org.codetuner.weaver.Weaver;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 
@@ -9,11 +9,12 @@ import java.util.Collections;
 import java.util.concurrent.Callable;
 
 
-@Command(name = "parallelize", description = "Parallelize the methods which can be concurrent", mixinStandardHelpOptions = true, version = "parallel 1.0")
-public class Parallelize implements Callable<Integer> {
-
-    @CommandLine.Option(names = {"-m", "methods"}, description = "Methods to be executed in Parallel", required = true, arity = "1..*", defaultValue = "*", showDefaultValue = CommandLine.Help.Visibility.ALWAYS)
+@Command(name = "logging", description = "extensively logs program execution", mixinStandardHelpOptions = true, version = "Logging 1.0")
+public class Logging implements Callable<Integer> {
+    @CommandLine.Option(names = {"-m", "methods"}, description = "Methods to be Logged", required = true, arity = "1..*", showDefaultValue = CommandLine.Help.Visibility.ALWAYS)
     private String[] methods;
+    @CommandLine.Option(names = {"-v", "variables"}, description = "Variables to be Logged", required = true, arity = "1..*", showDefaultValue = CommandLine.Help.Visibility.ALWAYS)
+    private String[] variables;
     @CommandLine.Option(names = {"-l", "--logfile"}, description = "Log file name", defaultValue = "")
     private String logFile;
     @CommandLine.Option(names = {"-a", "--aspect"}, description = "Add aspectjrt to path")
@@ -28,10 +29,12 @@ public class Parallelize implements Callable<Integer> {
         Weaver weaver = new Weaver(logFile, inputFile);
 
         ArrayList<String> methodsRegex = new ArrayList<>();
+        ArrayList<String> variablesRegex = new ArrayList<>();
+        Collections.addAll(methodsRegex, methods);
 
-      Collections.addAll(methodsRegex, methods);
+        Collections.addAll(variablesRegex, variables);
 
-        weaver.weaverParallelize(methodsRegex);
+        weaver.weaveLogging(methodsRegex, variablesRegex);
 
         if (aspect) {
             weaver.extractAspectjrtToJar();

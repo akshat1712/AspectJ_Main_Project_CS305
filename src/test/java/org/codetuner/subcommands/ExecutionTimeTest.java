@@ -1,4 +1,4 @@
-package org.jlogger.subcommands;
+package org.codetuner.subcommands;
 
 import org.junit.jupiter.api.Test;
 import picocli.CommandLine;
