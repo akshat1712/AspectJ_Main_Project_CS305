@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Caching.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Jlogger</a> &gt; <a href="index.source.html" class="el_package">org.jlogger.subcommands</a> &gt; <span class="el_source">Caching.java</span></div><h1>Caching.java</h1><pre class="source lang-java linenums">package org.jlogger.subcommands;
+
+import org.jlogger.logger.Weaver;
+import picocli.CommandLine;
+import picocli.CommandLine.Command;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.concurrent.Callable;
+
+
+@Command(name = &quot;caching&quot;, description = &quot;Cache methods with primitive arguments&quot;, mixinStandardHelpOptions = true, version = &quot;cache 1.0&quot;)
+<span class="fc" id="L13">public class Caching implements Callable&lt;Integer&gt; {</span>
+
+    @CommandLine.Option(names = {&quot;-m&quot;, &quot;methods&quot;}, description = &quot;Methods to be cached&quot;, required = true, arity = &quot;1..*&quot;, defaultValue = &quot;*&quot;, showDefaultValue = CommandLine.Help.Visibility.ALWAYS)
+    private String[] methods;
+
+    @CommandLine.Option(names = {&quot;-l&quot;, &quot;--logfile&quot;}, description = &quot;Log file name&quot;, defaultValue = &quot;&quot;)
+    private String logFile;
+    @CommandLine.Option(names = {&quot;-a&quot;, &quot;--aspect&quot;}, description = &quot;Add aspectjrt to path&quot;)
+    private boolean aspect;
+    @CommandLine.Option(names = {&quot;-i&quot;, &quot;--input&quot;}, description = &quot;Path to the jar file to be weaved&quot;, defaultValue = &quot;&quot;)
+    private String inputFile;
+    @CommandLine.Option(names = {&quot;-o&quot;, &quot;--output&quot;}, description = &quot;Path to the output file&quot;, defaultValue = &quot;weaved.jar&quot;)
+    private String outputFile;
+
+    @Override
+    public Integer call() throws Exception {
+<span class="fc" id="L29">        Weaver weaver = new Weaver(logFile, inputFile);</span>
+
+<span class="fc" id="L31">        ArrayList&lt;String&gt; methodsRegex = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L32">        Collections.addAll(methodsRegex, methods);</span>
+<span class="fc" id="L33">        weaver.weaverCaching(methodsRegex);</span>
+
+<span class="fc bfc" id="L35" title="All 2 branches covered.">        if (aspect) {</span>
+<span class="fc" id="L36">            weaver.extractAspectjrtToJar();</span>
+        }
+<span class="fc" id="L38">        weaver.saveWeavedJar(outputFile);</span>
+<span class="fc" id="L39">        return 0;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
