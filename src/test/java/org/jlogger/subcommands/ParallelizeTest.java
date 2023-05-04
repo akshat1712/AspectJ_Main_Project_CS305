@@ -3,7 +3,8 @@ package org.jlogger.subcommands;
 import org.junit.jupiter.api.Test;
 import picocli.CommandLine;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ParallelizeTest {
 
@@ -17,7 +18,7 @@ class ParallelizeTest {
         //Delete weaved.jar
         assertTrue(new java.io.File("weaved.jar").delete());
         //With aspectjrt
-        result = new CommandLine(new Parallelize()).execute("-m", "method1","method2", "-i", "src\\test\\resources\\test.jar", "-o", "weaved.jar", "-a");
+        result = new CommandLine(new Parallelize()).execute("-m", "method1", "method2", "-i", "src\\test\\resources\\test.jar", "-o", "weaved.jar", "-a");
         assertEquals(0, result);
         //Check if weaved.jar is created
         assertTrue(new java.io.File("weaved.jar").exists());

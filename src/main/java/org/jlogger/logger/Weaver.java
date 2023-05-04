@@ -6,13 +6,13 @@ import org.aspectj.tools.ajc.Main;
 
 import java.io.*;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.jar.JarOutputStream;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 
 public class Weaver {
@@ -21,7 +21,7 @@ public class Weaver {
     private final String aroundFieldSetPlaceHolder = "set($2 $1)";
     private final String aroundFieldGetPlaceHolder = "get($2 $1)";
 
-    private final String[] returnTypesArray = {"Integer","int","Long","long","Float","float","Double","double","String","Boolean","boolean","Byte","byte","Short","short","Character","char"};
+    private final String[] returnTypesArray = {"Integer", "int", "Long", "long", "Float", "float", "Double", "double", "String", "Boolean", "boolean", "Byte", "byte", "Short", "short", "Character", "char"};
     private final MessageHandler messageHandler;
     public String logFilePath;
     public String jarInputPath;
@@ -83,10 +83,10 @@ public class Weaver {
             // Replace the placeholder in the aspect with the log file path
 
             executionTimeAspectContents = executionTimeAspectContents.replace("${logFileName}", logFilePath);
-            executionTimeAspectContents = executionTimeAspectContents.replace("${MethodNames}", prepareFinalRegex(methodsRegex,aroundMethodPlaceHolder,"*"));
-            System.out.println(prepareFinalRegex(methodsRegex,aroundMethodPlaceHolder,"*"));
+            executionTimeAspectContents = executionTimeAspectContents.replace("${MethodNames}", prepareFinalRegex(methodsRegex, aroundMethodPlaceHolder, "*"));
+            System.out.println(prepareFinalRegex(methodsRegex, aroundMethodPlaceHolder, "*"));
             for (String methodRegex : methodsRegex) {
-                System.out.println("REGEX: "+methodRegex);
+                System.out.println("REGEX: " + methodRegex);
             }
 
             // Write the modified aspect to the temp directory
@@ -97,11 +97,11 @@ public class Weaver {
             String outputFileName = this.jarInputPath.replace(".jar", "_weaved.jar");
             //Set output file location without full path
             outputFileName = outputFileName.substring(outputFileName.lastIndexOf(System.getProperty("file.separator")) + 1);
-            System.out.println("Output file name: "+outputFileName);
+            System.out.println("Output file name: " + outputFileName);
             weaveJarFile(jarInputPath, workDir + System.getProperty("file.separator") + "ExecutionTimeAspect.java", workDir + System.getProperty("file.separator") + outputFileName);
             this.lastWeavedJarPath = workDir + System.getProperty("file.separator") + outputFileName;
             jarInputPath = this.lastWeavedJarPath;
-            System.out.println("LAST WEAVED JAR PATH: "+this.lastWeavedJarPath);
+            System.out.println("LAST WEAVED JAR PATH: " + this.lastWeavedJarPath);
 
             return true;
         } catch (Exception e) {
@@ -119,7 +119,7 @@ public class Weaver {
             // Replace the placeholder in the aspect with the log file path
 
             methodProfilerAspectContents = methodProfilerAspectContents.replace("${logFileName}", logFilePath);
-            methodProfilerAspectContents = methodProfilerAspectContents.replace("${MethodNames}", prepareFinalRegex(methodsRegex,aroundMethodPlaceHolder,"*"));
+            methodProfilerAspectContents = methodProfilerAspectContents.replace("${MethodNames}", prepareFinalRegex(methodsRegex, aroundMethodPlaceHolder, "*"));
 
             // Write the modified aspect to the temp directory
             FileWriter writer = new FileWriter(workDir + System.getProperty("file.separator") + "MethodProfilerAspect.java");
@@ -138,7 +138,7 @@ public class Weaver {
         }
     }
 
-    public boolean weaveLogging(ArrayList <String> methodsRegex, ArrayList <String> fieldsRegex) {
+    public boolean weaveLogging(ArrayList<String> methodsRegex, ArrayList<String> fieldsRegex) {
         try {
             // Get the file contents of LoggingAspect.java from the resources folder
             InputStream LoggingAspect = Weaver.class.getClassLoader().getResourceAsStream("LoggingAspect.java");
@@ -146,9 +146,9 @@ public class Weaver {
             // Replace the placeholder in the aspect with the log file path
 
             LoggingAspectContents = LoggingAspectContents.replace("${logFileName}", logFilePath);
-            LoggingAspectContents = LoggingAspectContents.replace("${MethodNames}", prepareFinalRegex(methodsRegex,aroundMethodPlaceHolder,"*"));
-            LoggingAspectContents = LoggingAspectContents.replace("${FieldSetNames}", prepareFinalRegex(fieldsRegex,aroundFieldSetPlaceHolder,"*"));
-            LoggingAspectContents = LoggingAspectContents.replace("${FieldGetNames}", prepareFinalRegex(fieldsRegex,aroundFieldGetPlaceHolder,"*"));
+            LoggingAspectContents = LoggingAspectContents.replace("${MethodNames}", prepareFinalRegex(methodsRegex, aroundMethodPlaceHolder, "*"));
+            LoggingAspectContents = LoggingAspectContents.replace("${FieldSetNames}", prepareFinalRegex(fieldsRegex, aroundFieldSetPlaceHolder, "*"));
+            LoggingAspectContents = LoggingAspectContents.replace("${FieldGetNames}", prepareFinalRegex(fieldsRegex, aroundFieldGetPlaceHolder, "*"));
 
             // Write the modified aspect to the temp directory
             FileWriter writer = new FileWriter(workDir + System.getProperty("file.separator") + "LoggingAspect.java");
@@ -167,14 +167,14 @@ public class Weaver {
         }
     }
 
-    public  boolean weaverParallelize(ArrayList<String> methodsRegex) {
+    public boolean weaverParallelize(ArrayList<String> methodsRegex) {
         try {
             // Get the file contents of ExecutionTimeAspect.java from the resources folder
             InputStream parallelizeAspect = Weaver.class.getClassLoader().getResourceAsStream("ParallelizeAspect.java");
             String parallelizeAspectContents = new String(parallelizeAspect.readAllBytes());
 
             parallelizeAspectContents = parallelizeAspectContents.replace("${logFileName}", logFilePath);
-            parallelizeAspectContents = parallelizeAspectContents.replace("${MethodNames}", prepareFinalRegex(methodsRegex,aroundMethodPlaceHolder,"*"));
+            parallelizeAspectContents = parallelizeAspectContents.replace("${MethodNames}", prepareFinalRegex(methodsRegex, aroundMethodPlaceHolder, "*"));
 
             // Write the  aspect to the temp directory
             FileWriter writer = new FileWriter(workDir + System.getProperty("file.separator") + "ParallelizeAspect.java");
@@ -184,7 +184,7 @@ public class Weaver {
             String outputFileName = this.jarInputPath.replace(".jar", "_weaved.jar");
             //Set output file location without full path
             outputFileName = outputFileName.substring(outputFileName.lastIndexOf(System.getProperty("file.separator")) + 1);
-            weaveJarFile(jarInputPath, workDir + System.getProperty("file.separator") + "ParallelizeAspect.java",workDir + System.getProperty("file.separator") + outputFileName);
+            weaveJarFile(jarInputPath, workDir + System.getProperty("file.separator") + "ParallelizeAspect.java", workDir + System.getProperty("file.separator") + outputFileName);
             this.lastWeavedJarPath = workDir + System.getProperty("file.separator") + outputFileName;
             jarInputPath = this.lastWeavedJarPath;
             return true;
@@ -205,7 +205,7 @@ public class Weaver {
             // loop over returnTypesArray
             for (String returnType : returnTypesArray) {
                 String methodName = "${MethodNames" + returnType + "}";
-                cachingAspectContents = cachingAspectContents.replace(methodName, prepareFinalRegex(methodsRegex,aroundMethodPlaceHolder,returnType));
+                cachingAspectContents = cachingAspectContents.replace(methodName, prepareFinalRegex(methodsRegex, aroundMethodPlaceHolder, returnType));
             }
 
             // Write the  aspect to the temp directory
@@ -298,13 +298,13 @@ public class Weaver {
         }
     }
 
-    private String prepareFinalRegex(ArrayList<String> methodsRegex,String PlaceHolder,String returnType) {
+    private String prepareFinalRegex(ArrayList<String> methodsRegex, String PlaceHolder, String returnType) {
 
         System.out.println(PlaceHolder);
 
         String finalRegex = "";
         for (String regex : methodsRegex) {
-            finalRegex += PlaceHolder.replace("$1", regex).replace("$2",returnType) + " || ";
+            finalRegex += PlaceHolder.replace("$1", regex).replace("$2", returnType) + " || ";
         }
         System.out.println(finalRegex.substring(0, finalRegex.length() - 4));
         System.out.flush();
@@ -312,25 +312,18 @@ public class Weaver {
         return finalRegex.substring(0, finalRegex.length() - 4);    // Remove the last " || "
     }
 
-    private boolean weaveJarFile(String jarFilePath, String aspectFilePath, String outjarPath) {
-        try {
+    private boolean weaveJarFile(String jarFilePath, String aspectFilePath, String outjarPath) throws Exception {
+        System.out.println("JARFILEPATH: " + jarFilePath);
+        System.out.println("ASPECTFILEPATH: " + aspectFilePath);
+        System.out.println("OUTJARPATH: " + outjarPath);
 
-            System.out.println("JARFILEPATH: "+jarFilePath);
-            System.out.println("ASPECTFILEPATH: "+aspectFilePath);
-            System.out.println("OUTJARPATH: "+outjarPath);
-
-            String[] args = {"-source", "1.8", "-target", "1.8", "-inpath", jarFilePath, aspectFilePath, "-outjar", outjarPath};
-            Main main = new Main();
-            main.run(args, this.messageHandler);
-            // Print the messages
-            for (IMessage message : this.messageHandler.getMessages(null, true)) {
-                System.out.println(message.toString());
-            }
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
+        String[] args = {"-source", "1.8", "-target", "1.8", "-inpath", jarFilePath, aspectFilePath, "-outjar", outjarPath};
+        Main main = new Main();
+        main.run(args, this.messageHandler);
+        // Print the messages
+        for (IMessage message : this.messageHandler.getMessages(null, true)) {
+            System.out.println(message.toString());
         }
+        return true;
     }
-
 }

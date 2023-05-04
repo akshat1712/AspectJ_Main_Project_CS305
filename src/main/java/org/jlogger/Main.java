@@ -1,18 +1,13 @@
 package org.jlogger;
 
-import org.jlogger.subcommands.MethodProfiler;
-import org.jlogger.subcommands.Parallelize;
-import org.jlogger.subcommands.Logging;
-import org.jlogger.subcommands.ExecutionTime;
-import org.jlogger.subcommands.Caching;
-
+import org.jlogger.subcommands.*;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 
 import java.util.concurrent.Callable;
 
 @Command(name = "jlogger",
-mixinStandardHelpOptions = true,
+        mixinStandardHelpOptions = true,
         version = "jlogger 0.1",
         description = "A simple tool to weave jar files",
         subcommands = {ExecutionTime.class, MethodProfiler.class, Parallelize.class, Logging.class, Caching.class}

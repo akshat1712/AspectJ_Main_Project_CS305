@@ -1,9 +1,11 @@
 package org.jlogger.subcommands;
+
+import org.jlogger.logger.Weaver;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
-import org.jlogger.logger.Weaver;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.concurrent.Callable;
 
 
@@ -21,14 +23,13 @@ public class Caching implements Callable<Integer> {
     private String inputFile;
     @CommandLine.Option(names = {"-o", "--output"}, description = "Path to the output file", defaultValue = "weaved.jar")
     private String outputFile;
+
     @Override
     public Integer call() throws Exception {
         Weaver weaver = new Weaver(logFile, inputFile);
 
         ArrayList<String> methodsRegex = new ArrayList<>();
-        for (String method : methods) {
-            methodsRegex.add(method);
-        }
+        Collections.addAll(methodsRegex, methods);
         weaver.weaverCaching(methodsRegex);
 
         if (aspect) {
