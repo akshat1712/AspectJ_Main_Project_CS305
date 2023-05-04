@@ -1,8 +1,26 @@
 plugins {
     id 'java'
     id 'com.github.johnrengelman.shadow' version '7.0.0'
+    id 'jacoco'
 }
-
+jacoco {
+    toolVersion = "0.8.8"
+    reportsDir = file("/docs/reports")
+}
+test {
+    finalizedBy jacocoTestReport
+    useJUnitPlatform()
+}
+jacocoTestReport {
+    dependsOn test
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it,
+                    exclude: ['**.jar',
+                              ])
+        }))
+    }
+}
 group 'org.jlogger'
 version '1.0-SNAPSHOT'
 
@@ -29,9 +47,6 @@ dependencies {
     annotationProcessor 'info.picocli:picocli-codegen:4.7.1'
 }
 
-test {
-    useJUnitPlatform()
-}
 shadowJar {
     mergeServiceFiles()
     manifest {
