@@ -1,0 +1,5 @@
+Instructions to install the CLI in windows:
+    *. Make sure codetuner-1.0-SNAPSHOT-all.jar is present in the directory. If not, run gradlew shadowJar in the main project directory.
+    *. Add this directory to the windows path.
+    *. Open command prompt and type codetuner --help to see the list of commands.
+    *. To run the CLI, type codetuner <command> <options> as shown in the help menu.
