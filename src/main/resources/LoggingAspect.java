@@ -5,6 +5,11 @@ import org.aspectj.lang.reflect.MethodSignature;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Calendar;
+
 @Aspect
 public class LoggingAspect {
 
@@ -36,12 +41,12 @@ public class LoggingAspect {
         Object[] args = joinPoint.getArgs();
 
         if (args.length == 0) {
-            message = "Entering " + joinPoint.getSignature().getName() + " With No arguments";
+            message = "Entering FUNCTION [" + joinPoint.getSignature().getName() + "] With No arguments";
             printLogMessage(message);
             return;
         }
 
-        message = "Entering " + joinPoint.getSignature().getName() + " With Following arguments";
+        message = "Entering FUNCTION [" + joinPoint.getSignature().getName() + "] With Following arguments: ";
         printLogMessage(message);
 
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
@@ -52,10 +57,10 @@ public class LoggingAspect {
             String type = getTypeName(args[i]);
 
             if (type == null) {
-                message = "Arguement " + parameterNames[i] + ": " + args[i];
+                message = "Argument [" + parameterNames[i] + "] : " + args[i];
                 printLogMessage(message);
             } else {
-                message = "Arguement " + parameterNames[i] + " of TYPE " + type;
+                message = "Argument [" + parameterNames[i] + "] of TYPE " + type;
                 printLogMessage(message);
             }
 
@@ -67,15 +72,15 @@ public class LoggingAspect {
     public void LogMethodReturn(JoinPoint joinPoint, Object result) throws Exception {
 
         String message;
-        message = "Exiting " + joinPoint.getSignature().getName();
+        message = "Exiting [" + joinPoint.getSignature().getName()+"]";
         printLogMessage(message);
 
         String type = getTypeName(result);
 
         if (type == null)
-            message = "Returned value of " + joinPoint.getSignature().getName() + ": " + result;
+            message = "Returned value of FUNCTION [" + joinPoint.getSignature().getName() + "]: " + result;
         else
-            message = "Returned value of " + joinPoint.getSignature().getName() + " of TYPE " + type;
+            message = "Returned value of FUNCTION [" + joinPoint.getSignature().getName() + "] of TYPE " + type;
 
         printLogMessage(message);
 
@@ -86,7 +91,7 @@ public class LoggingAspect {
     //This method is used to log the exceptions thrown by the methods
     public void logMethodException(JoinPoint joinPoint, Exception exception) throws Exception {
 
-        String message = "Exception caught in " + joinPoint.getSignature().getName() + " of CLASS " + joinPoint.getTarget().getClass().getName();
+        String message = "Exception caught in FUNCTION [" + joinPoint.getSignature().getName() + "] of CLASS [" + joinPoint.getTarget().getClass().getName()+"]";
 
         printLogMessage(message);
 
@@ -107,7 +112,7 @@ public class LoggingAspect {
         value = joinPoint.getTarget().getClass().getDeclaredField(fieldName).get(joinPoint.getTarget());
         className = joinPoint.getTarget().getClass().getDeclaredField(fieldName).getDeclaringClass().getName();
 
-        printLogMessage("Value of FIELD " + fieldName + " of CLASS " + className + " Before Setting is " + value);
+        printLogMessage("Value of FIELD [" + fieldName + "] of CLASS [" + className + "] before Setting:  " + value);
     }
 
     @After("(${FieldSetNames}) && excludeAspectClasses()")
@@ -126,7 +131,7 @@ public class LoggingAspect {
             e.printStackTrace();
         }
 
-        printLogMessage("Value of FIELD " + fieldName + " of CLASS " + className + " After Setting is " + value);
+        printLogMessage("Value of FIELD [" + fieldName + "] of CLASS [" + className + "] After Setting: " + value);
     }
 
     @Before("(${FieldGetNames}) && excludeAspectClasses()")
@@ -139,20 +144,31 @@ public class LoggingAspect {
         value = joinPoint.getTarget().getClass().getDeclaredField(fieldName).get(joinPoint.getTarget());
         className = joinPoint.getTarget().getClass().getDeclaredField(fieldName).getDeclaringClass().getName();
 
-        printLogMessage("Accessed FIELD " + fieldName + " " + value + " of CLASS " + className);
+        printLogMessage("Accessed FIELD [" + fieldName + "] " + value + " of CLASS [" + className+"]");
     }
 
 
     void printLogMessage(String message) {
 
+        Date date = Calendar.getInstance().getTime();
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss.SSS");
+        String date_time = dateFormat.format(date);
+
+
+        writer.print("["+date_time + "] ");
         for (int i = 0; i < depth; i++) {
             writer.print("   ");
         }
-        writer.println("|");
-        for (int i = 0; i < depth; i++) {
-            writer.print("   ");
+        if(message.contains("Argument")){
+            writer.print(" ");
         }
-        writer.println("---> " + message);
+
+        if( message.contains("Exception") || message.contains("Returned") || message.contains("Exiting")){
+            writer.println("<--- "+ message);
+        }
+        else{
+            writer.println("---> " + message);
+        }
         writer.flush();
 
     }
