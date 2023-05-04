@@ -50,3 +50,4 @@ bin/
 TESTING_CODE/
 /docs/reports
 /dist/windows/*.jar
+/dist/linux/*.jar

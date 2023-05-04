@@ -3,3 +3,5 @@ Instructions to install the CLI in windows:
     *. Add this directory to the windows path.
     *. Open command prompt and type codetuner --help to see the list of commands.
     *. To run the CLI, type codetuner <command> <options> as shown in the help menu.
+
+Make sure java is installed in your system and JAVA_HOME is set to the java installation directory. This works best with java 18. Might work with other versions too.

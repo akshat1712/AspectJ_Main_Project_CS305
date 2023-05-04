@@ -55,4 +55,10 @@ shadowJar {
         attributes 'Main-Class': 'org.codetuner.Main'
     }
     destinationDirectory = file('dist/windows')
+    doLast {
+        copy {
+            from 'dist/windows/codetuner-1.0-SNAPSHOT-all.jar'
+            into 'dist/linux'
+        }
+    }
 }
