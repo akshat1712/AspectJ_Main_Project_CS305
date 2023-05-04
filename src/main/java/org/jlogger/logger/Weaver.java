@@ -27,18 +27,13 @@ public class Weaver {
     public String jarInputPath;
     private String lastWeavedJarPath = "";
 
-    public Weaver(String logFilePath, String jarInputPath) {
+    public Weaver(String logFilePath, String jarInputPath) throws IOException {
         // If the temp directory is not present in workDir, create it
 
         if (new java.io.File(workDir).exists()) {
-
-            try {
                 Files.walk(Paths.get(workDir))
                         .map(Path::toFile)
                         .forEach(File::delete);
-            } catch (IOException e) {
-                System.err.println("Error while deleting temp directory");
-            }
 
         }
         new java.io.File(workDir).mkdir();
@@ -290,6 +285,8 @@ public class Weaver {
 
             inputJar.close();
             outputJar.close();
+
+            aspectjrtJar.close();
             this.lastWeavedJarPath = outputJarPath;
             return true;
         } catch (Exception e) {
