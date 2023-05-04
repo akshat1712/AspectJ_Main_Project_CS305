@@ -33,6 +33,7 @@ public class Main implements Callable<Integer> {
             System.out.println("Operation completed successfully");
             System.exit(0);
         }
+        System.err.println("Operation failed");
         System.exit(1);
     }
 
