@@ -21,61 +21,61 @@ public class CachingAspect {
     GenericCacheHandlerAspect<Short> shortCacheHandlerAspect = new GenericCacheHandlerAspect<Short>();
     GenericCacheHandlerAspect<Float> floatCacheHandlerAspect = new GenericCacheHandlerAspect<Float>();
 
-    @Pointcut("!within(CachingAspect)")
-    public void excludeAspectfile() {
+    @Pointcut("!within(ParallelizeAspect) || !within(CachingAspect) || !within(ExecutionTimeAspect) || !within(LoggingAspect) || !within(MethodProfilerAspect)")
+    public void excludeAspectClasses() {
     }
 
-    //Around for methods which return Integer
-    @Around("(${MethodNamesInteger}) || (${MethodNamesint}) && excludeAspectfile()")
-    public Integer wrapInteger(final ProceedingJoinPoint point) {
+    @Around("(${MethodNamesInteger}) || (${MethodNamesint}) && excludeAspectClasses()")
+    //Mehod to cache the methods which return Integer or int
+    public Integer wrapInteger(final ProceedingJoinPoint point) throws Exception {
         return integerCacheHandlerAspect.cachedToFunctionCalls(point);
     }
 
-    //Around for methods which return String
-    @Around("(${MethodNamesString}) && excludeAspectfile()")
-    public String wrapString(final ProceedingJoinPoint point) {
+    @Around("(${MethodNamesString}) && excludeAspectClasses()")
+    //Mehod to cache the methods which return String
+    public String wrapString(final ProceedingJoinPoint point) throws Exception {
         return stringCacheHandlerAspect.cachedToFunctionCalls(point);
     }
 
-    //Around for methods which return Double
-    @Around("(${MethodNamesDouble}) || (${MethodNamesdouble}) && excludeAspectfile()")
-    public Double wrapDouble(final ProceedingJoinPoint point) {
+    @Around("(${MethodNamesDouble}) || (${MethodNamesdouble}) && excludeAspectClasses()")
+    //Mehod to cache the methods which return Double or double
+    public Double wrapDouble(final ProceedingJoinPoint point) throws Exception {
         return doubleCacheHandlerAspect.cachedToFunctionCalls(point);
     }
 
-    //Around for methods which return Long
-    @Around("(${MethodNamesLong}) || (${MethodNameslong}) && excludeAspectfile()")
-    public Long wrapLong(final ProceedingJoinPoint point) {
+    @Around("(${MethodNamesLong}) || (${MethodNameslong}) && excludeAspectClasses()")
+    //Mehod to cache the methods which return Long or long
+    public Long wrapLong(final ProceedingJoinPoint point) throws Exception {
         return longCacheHandlerAspect.cachedToFunctionCalls(point);
     }
 
-    //Around for methods which return Boolean
-    @Around("(${MethodNamesBoolean}) || (${MethodNamesboolean}) && excludeAspectfile()")
-    public Boolean wrapBoolean(final ProceedingJoinPoint point) {
+    @Around("(${MethodNamesBoolean}) || (${MethodNamesboolean}) && excludeAspectClasses()")
+    //Mehod to cache the methods which return Boolean or boolean
+    public Boolean wrapBoolean(final ProceedingJoinPoint point) throws Exception {
         return booleanCacheHandlerAspect.cachedToFunctionCalls(point);
     }
 
-    //Around for methods which return Byte
-    @Around("(${MethodNamesByte}) || (${MethodNamesbyte}) && excludeAspectfile()")
-    public Byte wrapByte(final ProceedingJoinPoint point) {
+    @Around("(${MethodNamesByte}) || (${MethodNamesbyte}) && excludeAspectClasses()")
+    //Mehod to cache the methods which return Byte or byte
+    public Byte wrapByte(final ProceedingJoinPoint point) throws Exception {
         return byteCacheHandlerAspect.cachedToFunctionCalls(point);
     }
 
-    //Around for methods which return Character
-    @Around("(${MethodNamesCharacter}) || (${MethodNameschar}) && excludeAspectfile()")
-    public Character wrapCharacter(final ProceedingJoinPoint point) {
+    @Around("(${MethodNamesCharacter}) || (${MethodNameschar}) && excludeAspectClasses()")
+    //Mehod to cache the methods which return Character or char
+    public Character wrapCharacter(final ProceedingJoinPoint point) throws Exception {
         return charCacheHandlerAspect.cachedToFunctionCalls(point);
     }
 
-    //Around for methods which return Short
-    @Around("(${MethodNamesShort}) || (${MethodNamesshort}) && excludeAspectfile()")
-    public Short wrapShort(final ProceedingJoinPoint point) {
+    @Around("(${MethodNamesShort}) || (${MethodNamesshort}) && excludeAspectClasses()")
+    //Mehod to cache the methods which return Short or short
+    public Short wrapShort(final ProceedingJoinPoint point) throws Exception {
         return shortCacheHandlerAspect.cachedToFunctionCalls(point);
     }
 
-    //Around for methods which return Float
-    @Around("(${MethodNamesFloat}) || (${MethodNamesfloat}) && excludeAspectfile()")
-    public Float wrapFloat(final ProceedingJoinPoint point) {
+    @Around("(${MethodNamesFloat}) || (${MethodNamesfloat}) && excludeAspectClasses()")
+    //Mehod to cache the methods which return Float or float
+    public Float wrapFloat(final ProceedingJoinPoint point) throws Exception {
         return floatCacheHandlerAspect.cachedToFunctionCalls(point);
     }
 
@@ -84,29 +84,26 @@ public class CachingAspect {
 
         private Map<Integer, T> functionCallValues = new HashMap<>();
 
-        public T cachedToFunctionCalls(ProceedingJoinPoint thisJoinPoint) { // , cached.timeToLiveMillis()
+        public T cachedToFunctionCalls(ProceedingJoinPoint thisJoinPoint) throws Exception { // , cached.timeToLiveMillis()
 
             String name = thisJoinPoint.getSignature().getName();
             Object[] args = thisJoinPoint.getArgs();
             String keyString = name + Arrays.toString(args);
             Integer key = keyString.hashCode();
 
-            if (functionCallValues.containsKey(key)) { // functionCall
-                T cachedValue = (T) functionCallValues.get(key); // functionCall
+            if (functionCallValues.containsKey(key)) {
+                T cachedValue = (T) functionCallValues.get(key);
 
                 return cachedValue;
             }
 
             Object value = thisJoinPoint.proceed();
             T cachedValue = (T) value;
-            // , cached.timeToLiveMillis()
-            functionCallValues.put(key, cachedValue); // functionCall
+            functionCallValues.put(key, cachedValue);
 
 
             return (T) value;
         }
 
     }
-
 }
-
