@@ -54,4 +54,5 @@ shadowJar {
     manifest {
         attributes 'Main-Class': 'org.codetuner.Main'
     }
+    destinationDirectory = file('dist/windows')
 }
