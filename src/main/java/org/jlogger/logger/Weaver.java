@@ -234,9 +234,9 @@ public class Weaver {
     public boolean extractAspectjrtToJar() {
         try {
             ClassLoader classLoader = Weaver.class.getClassLoader();
-            InputStream inputStream = classLoader.getResourceAsStream("aspectjrt.jar");
+            InputStream inputStream = classLoader.getResourceAsStream("aspectjrt");
             //Copy this file to working directory first
-            java.nio.file.Files.copy(inputStream, new java.io.File(workDir + System.getProperty("file.separator") + "aspectjrt.jar").toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+            java.nio.file.Files.copy(inputStream, new java.io.File(workDir + System.getProperty("file.separator") + "aspectjrt").toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
             String inputJarPath = this.lastWeavedJarPath;
             String outputJarPath = this.lastWeavedJarPath.replace(".jar", "_aspectjrt.jar");
             // Copy the contents of the input jar to the output jar
@@ -249,8 +249,8 @@ public class Weaver {
             }
             // Create the path
             new java.io.File(JarExtractPath).mkdir();
-            // Extract the aspectjrt.jar to the JarExtract directory
-            JarFile aspectjrtJar = new JarFile(workDir + System.getProperty("file.separator") + "aspectjrt.jar");
+            // Extract the aspectjrt to the JarExtract directory
+            JarFile aspectjrtJar = new JarFile(workDir + System.getProperty("file.separator") + "aspectjrt");
             Enumeration<JarEntry> entries = aspectjrtJar.entries();
             while (entries.hasMoreElements()) {
                 JarEntry entry = entries.nextElement();

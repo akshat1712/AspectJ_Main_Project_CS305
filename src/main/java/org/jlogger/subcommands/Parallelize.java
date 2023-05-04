@@ -9,7 +9,7 @@ import java.util.Collections;
 import java.util.concurrent.Callable;
 
 
-@Command(name = "parallelize", description = "Parallelize the methods with annotation", mixinStandardHelpOptions = true, version = "parallel 1.0")
+@Command(name = "parallelize", description = "Parallelize the methods which can be concurrent", mixinStandardHelpOptions = true, version = "parallel 1.0")
 public class Parallelize implements Callable<Integer> {
 
     @CommandLine.Option(names = {"-m", "methods"}, description = "Methods to be executed in Parallel", required = true, arity = "1..*", defaultValue = "*", showDefaultValue = CommandLine.Help.Visibility.ALWAYS)

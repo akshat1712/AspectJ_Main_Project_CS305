@@ -9,7 +9,7 @@ import java.util.Collections;
 import java.util.concurrent.Callable;
 
 
-@Command(name = "caching", description = "Cache methods with annotation", mixinStandardHelpOptions = true, version = "cache 1.0")
+@Command(name = "caching", description = "Cache methods with primitive arguments", mixinStandardHelpOptions = true, version = "cache 1.0")
 public class Caching implements Callable<Integer> {
 
     @CommandLine.Option(names = {"-m", "methods"}, description = "Methods to be cached", required = true, arity = "1..*", defaultValue = "*", showDefaultValue = CommandLine.Help.Visibility.ALWAYS)
