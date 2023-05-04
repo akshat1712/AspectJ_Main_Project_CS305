@@ -30,6 +30,7 @@ public class Main implements Callable<Integer> {
     public static void main(String[] args) {
         int exitCode = new CommandLine(new Main()).execute(args);
         if (exitCode == 0) {
+            System.out.println("Operation completed successfully");
             System.exit(0);
         }
         System.exit(1);
