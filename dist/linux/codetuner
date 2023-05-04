@@ -1,0 +1,7 @@
+#!/bin/bash
+myPath="$(dirname "$(readlink -f "$0")")"
+jarPath="/codetuner-1.0-SNAPSHOT-all.jar"
+filePath="$myPath$jarPath"
+
+
+java -jar "$filePath" "$@"

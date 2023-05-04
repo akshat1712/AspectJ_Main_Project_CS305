@@ -1,0 +1,10 @@
+Instructions to install the CLI in linux:
+    *. Make sure codetuner-1.0-SNAPSHOT-all.jar is present in the directory. If not, run gradlew shadowJar in the main project directory.
+    *. Run the install.sh script with appropriate permissions. Please enter password if prompted. This will install the CLI in /usr/local/bin directory.
+    *. Open command prompt and type codetuner --help to see the list of commands.
+    *. To run the CLI, type codetuner <command> <options> as shown in the help menu.
+
+    *. Please Note that user has to use -a in last weaving commands only
+    *. Otherwise, Unexpected results may occur
+
+Make sure java is installed in your system and JAVA_HOME is set to the java installation directory. This works best with java 18. Might work with other versions too.
