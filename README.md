@@ -39,4 +39,4 @@ codetuner --help
 
 ## Docs
 - Please [click here](https://github.com/akshat1712/AspectJ_Main_Project_CS305) to check the docs from the github repository wiki page.
-- The docs are also available in the docs/ folder in the root directory of the project as md files. Use proper markdown viewer to view the docs.
+- The docs are also available in the docs/ folder in the root directory of the project as md files. Use proper markdown viewer to view the docs. Pdfs are also available for viewing if markdown viewer is not available.
