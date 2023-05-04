@@ -1,4 +1,3 @@
-import com.sun.management.OperatingSystemMXBean;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -7,6 +6,8 @@ import org.aspectj.lang.annotation.Pointcut;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.lang.management.ManagementFactory;
+import java.lang.management.OperatingSystemMXBean;
+import java.lang.management.ThreadMXBean;
 
 @Aspect
 public class MethodProfilerAspect {
@@ -38,13 +39,13 @@ public class MethodProfilerAspect {
         Object ret = null;
         try {
 
-
-            OperatingSystemMXBean osBean = ManagementFactory.getPlatformMXBean(OperatingSystemMXBean.class);
+            ThreadMXBean threadBean = ManagementFactory.getThreadMXBean();
+            OperatingSystemMXBean osBean = ManagementFactory.getOperatingSystemMXBean();
 
             Runtime runtime = Runtime.getRuntime();
             System.gc();
-            //initial time
-            long prevProcessCpuTime = osBean.getProcessCpuTime();
+            // initial time
+            long prevProcessCpuTime = threadBean.getCurrentThreadCpuTime();
             long prevUpTime = System.nanoTime();
 
             double startMemory = runtime.totalMemory() - runtime.freeMemory();
@@ -53,25 +54,23 @@ public class MethodProfilerAspect {
 
             double endMemory = runtime.totalMemory() - runtime.freeMemory();
 
-            //final time
-            long currProcessCpuTime = osBean.getProcessCpuTime();
+            // final time
+            long currProcessCpuTime = threadBean.getCurrentThreadCpuTime();
             long currUpTime = System.nanoTime();
 
-            int factor = 1024 * 1024; //convert to MB
+            int factor = 1024 * 1024; // convert to MB
             String methodName = point.getSignature().toString();
 
             String memoryUsed = methodName + " Memory Used ( Heap ) in MB:" + (endMemory - startMemory) / factor;
-
 
             long elapsedProcessCpuTime = currProcessCpuTime - prevProcessCpuTime;
             long elapsedUpTime = currUpTime - prevUpTime;
 
             double cpuUsage = (elapsedProcessCpuTime / (elapsedUpTime * 1.0 * osBean.getAvailableProcessors())) * 100.0;
 
-
             printProfiler(memoryUsed);
             String temp = "cpuUsed";
-            String cpuUsed = "CPU Usage: " + String.format("%.5f", cpuUsage) + "%";
+            String cpuUsed = methodName+ " CPU Usage: " + String.format("%.5f", cpuUsage) + "%";
             printProfiler(cpuUsed);
 
 

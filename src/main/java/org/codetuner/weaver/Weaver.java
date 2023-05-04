@@ -14,6 +14,15 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.jar.JarOutputStream;
 
+/**
+ * The Weaver class is responsible for weaving logging code into a Java archive file.
+ * It takes a log file path and an input jar file path as input, and outputs the woven jar
+ * file to the output directory. The weaving process involves modifying the bytecode of
+ * the input jar file to add logging statements at specific locations.
+ *
+ * The Weaver class uses the ASM library to manipulate bytecode. It can weave logging
+ * statements into any Java archive file that contains class files.
+ */
 
 public class Weaver {
     private final String workDir = System.getProperty("user.home") + System.getProperty("file.separator") + ".jloggertemp";
@@ -26,6 +35,15 @@ public class Weaver {
     public String logFilePath;
     public String jarInputPath;
     private String lastWeavedJarPath = "";
+
+    /**
+     * Constructs a new Weaver object that weaves logging code into a Java jar file
+     * using the log file specified and the input jar file specified.
+     *
+     * @param logFilePath the file path of the log file to be used for aspect logs
+     * @param jarInputPath the file path of the input jar file to be woven with aspect code
+     * @throws IOException if an I/O error occurs while accessing the log file or input jar file
+     */
 
     public Weaver(String logFilePath, String jarInputPath) throws IOException {
         // If the temp directory is not present in workDir, create it
@@ -44,6 +62,7 @@ public class Weaver {
         this.messageHandler = new MessageHandler(true);
 
     }
+
 
     private static void addFilesToJar(String sourceFolder, JarOutputStream jos, String parentFolder) throws IOException {
         File folder = new File(sourceFolder);
@@ -68,6 +87,16 @@ public class Weaver {
             }
         }
     }
+
+    /**
+     * Weaves time aspect into the bytecode of all methods in the input jar file
+     * that match the regular expressions specified in the methodsRegex list. The logging
+     * statements will log the execution time of the method.
+     *
+     * @param methodsRegex a list of regular expressions specifying which methods to weave
+     *                     logging statements into
+     * @return true if the weaving was successful, false otherwise
+     */
 
     public boolean weaveMethodExecutionTime(ArrayList<String> methodsRegex) {
         try {
@@ -105,6 +134,15 @@ public class Weaver {
         }
     }
 
+    /**
+     * Weaves profiling code into the bytecode of all methods in the input jar file
+     * that match the regular expressions specified in the methodsRegex list. The profiling
+     * code will record the total time spent executing each method and memory usage.
+     *
+     * @param methodsRegex a list of regular expressions specifying which methods to profile
+     *                     with the added profiling code
+     * @return true if the weaving was successful, false otherwise
+     */
     public boolean weaverMethodProfiler(ArrayList<String> methodsRegex) {
         try {
             // Get the file contents of ExecutionTimeAspect.java from the resources folder
@@ -132,6 +170,20 @@ public class Weaver {
             return false;
         }
     }
+
+    /**
+     * Weaves logging statements into the bytecode of all methods and fields in the input
+     * jar file that match the regular expressions specified in the methodsRegex and
+     * fieldsRegex lists, respectively. The logging statements will log the values of the
+     * specified fields, the parameters, return value of the specified methods and exception
+     * thrown if any.
+     *
+     * @param methodsRegex a list of regular expressions specifying which methods to weave
+     *                     logging statements into
+     * @param fieldsRegex a list of regular expressions specifying which fields to weave
+     *                    logging statements into
+     * @return true if the weaving was successful, false otherwise
+     */
 
     public boolean weaveLogging(ArrayList<String> methodsRegex, ArrayList<String> fieldsRegex) {
         try {
@@ -162,6 +214,17 @@ public class Weaver {
         }
     }
 
+    /**
+     * Weaves parallelization code into the bytecode of all methods in the input jar file
+     * that match the regular expressions specified in the methodsRegex list. The
+     * parallelization code will parallelize the execution of the specified methods using
+     * the Java Future framework.
+     *
+     * @param methodsRegex a list of regular expressions specifying which methods to
+     *                     parallelize with the added parallelization code
+     * @return true if the weaving was successful, false otherwise
+     */
+
     public boolean weaverParallelize(ArrayList<String> methodsRegex) {
         try {
             // Get the file contents of ExecutionTimeAspect.java from the resources folder
@@ -188,6 +251,16 @@ public class Weaver {
             return false;
         }
     }
+
+    /**
+     * Weaves caching code into the bytecode of all methods in the input jar file
+     * that match the regular expressions specified in the methodsRegex list. The caching
+     * code will cache the results of the specified methods to improve performance.
+     *
+     * @param methodsRegex a list of regular expressions specifying which methods to weave
+     *                     caching code into
+     * @return true if the weaving was successful, false otherwise
+     */
 
     public boolean weaverCaching(ArrayList<String> methodsRegex) {
         try {
@@ -221,6 +294,14 @@ public class Weaver {
         }
     }
 
+    /**
+     * Saves the weaved Java archive file to the specified path. The weaved jar file must
+     * have already been generated using one of the weaving methods provided by this class.
+     *
+     * @param path the file path where the weaved jar file should be saved
+     * @return true if the file was successfully saved, false otherwise
+     */
+
     public boolean saveWeavedJar(String path) {
         try {
             java.nio.file.Files.copy(new java.io.File(this.lastWeavedJarPath).toPath(), new java.io.File(path).toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
@@ -230,6 +311,14 @@ public class Weaver {
             return false;
         }
     }
+
+    /**
+     * Extracts the AspectJ runtime (aspectjrt.jar) file from the classpath and saves it
+     * to a temporary file. This is necessary to be able to use the AspectJ library to
+     * manipulate bytecode and publishing jar.
+     *
+     * @return true if the extraction was successful, false otherwise
+     */
 
     public boolean extractAspectjrtToJar() {
         try {
