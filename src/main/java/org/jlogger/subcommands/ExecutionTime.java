@@ -16,9 +16,9 @@ public class ExecutionTime implements Callable<Integer> {
     private String logFile;
     @CommandLine.Option(names = {"-a", "--aspect"}, description = "Add aspectjrt to path")
     private boolean aspect;
-    @CommandLine.Option(names = {"-i", "--input"}, description = "Path to the jar file to be weaved", defaultValue = "")
+    @CommandLine.Option(names = {"-i", "--injar"}, description = "Path to the jar file to be weaved", defaultValue = "")
     private String inputFile;
-    @CommandLine.Option(names = {"-o", "--output"}, description = "Path to the output file", defaultValue = "weaved.jar")
+    @CommandLine.Option(names = {"-o", "--outjar"}, description = "Path to the output file", defaultValue = "weaved.jar")
     private String outputFile;
     @Override
     public Integer call() throws Exception {

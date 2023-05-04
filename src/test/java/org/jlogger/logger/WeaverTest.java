@@ -33,7 +33,7 @@ class WeaverTest {
     @Order(2)
     void weaverMethodProfiler() {
         ArrayList <String> methods = new ArrayList<>();
-        methods.add("*");
+        methods.add("method1");
         boolean result = weaver.weaverMethodProfiler(methods);
         assertTrue(result);
     }
@@ -42,9 +42,9 @@ class WeaverTest {
     @Order(3)
     void weaveLogging() {
         ArrayList <String> methods = new ArrayList<>();
-        methods.add("*");
+        methods.add("method2");
         ArrayList <String> fieldregex = new ArrayList<>();
-        fieldregex.add("*");
+        fieldregex.add("MyService.*");
         boolean result = weaver.weaveLogging(methods, fieldregex);
         assertTrue(result);
     }
@@ -61,6 +61,11 @@ class WeaverTest {
 
     @Test
     void weaverCaching() {
+        ArrayList <String> methods = new ArrayList<>();
+        methods.add("method1");
+        methods.add("method2");
+        boolean result = weaver.weaverCaching(methods);
+        assertTrue(result);
     }
 
     @Test
@@ -78,7 +83,7 @@ class WeaverTest {
         assertTrue(weaver.extractAspectjrtToJar());
     }
     @Test
-    @Order(6)
+    @Order(7)
     void deleteWeavedJar() throws IOException {
         assertTrue(Files.deleteIfExists(Paths.get(System.getProperty("user.dir"),"weaved.jar")));
         assertFalse(Paths.get(System.getProperty("user.dir"),"weaved.jar").toFile().exists());

@@ -100,7 +100,7 @@ public class Weaver {
             System.out.println("Output file name: "+outputFileName);
             weaveJarFile(jarInputPath, workDir + System.getProperty("file.separator") + "ExecutionTimeAspect.java", workDir + System.getProperty("file.separator") + outputFileName);
             this.lastWeavedJarPath = workDir + System.getProperty("file.separator") + outputFileName;
-
+            jarInputPath = this.lastWeavedJarPath;
             System.out.println("LAST WEAVED JAR PATH: "+this.lastWeavedJarPath);
 
             return true;
@@ -130,6 +130,7 @@ public class Weaver {
             outputFileName = outputFileName.substring(outputFileName.lastIndexOf(System.getProperty("file.separator")) + 1);
             weaveJarFile(jarInputPath, workDir + System.getProperty("file.separator") + "MethodProfilerAspect.java", workDir + System.getProperty("file.separator") + outputFileName);
             this.lastWeavedJarPath = workDir + System.getProperty("file.separator") + outputFileName;
+            jarInputPath = this.lastWeavedJarPath;
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -158,6 +159,7 @@ public class Weaver {
             outputFileName = outputFileName.substring(outputFileName.lastIndexOf(System.getProperty("file.separator")) + 1);
             weaveJarFile(jarInputPath, workDir + System.getProperty("file.separator") + "LoggingAspect.java", workDir + System.getProperty("file.separator") + outputFileName);
             this.lastWeavedJarPath = workDir + System.getProperty("file.separator") + outputFileName;
+            jarInputPath = this.lastWeavedJarPath;
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -184,6 +186,7 @@ public class Weaver {
             outputFileName = outputFileName.substring(outputFileName.lastIndexOf(System.getProperty("file.separator")) + 1);
             weaveJarFile(jarInputPath, workDir + System.getProperty("file.separator") + "ParallelizeAspect.java",workDir + System.getProperty("file.separator") + outputFileName);
             this.lastWeavedJarPath = workDir + System.getProperty("file.separator") + outputFileName;
+            jarInputPath = this.lastWeavedJarPath;
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -215,7 +218,7 @@ public class Weaver {
             outputFileName = outputFileName.substring(outputFileName.lastIndexOf(System.getProperty("file.separator")) + 1);
             weaveJarFile(jarInputPath, workDir + System.getProperty("file.separator") + "CachingAspect.java", workDir + System.getProperty("file.separator") + outputFileName);
             this.lastWeavedJarPath = workDir + System.getProperty("file.separator") + outputFileName;
-
+            jarInputPath = this.lastWeavedJarPath;
             return true;
         } catch (Exception e) {
             e.printStackTrace();
