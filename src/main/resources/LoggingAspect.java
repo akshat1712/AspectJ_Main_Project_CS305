@@ -145,14 +145,12 @@ public class LoggingAspect {
 
     void printLogMessage(String message) {
 
-        writer.println("DEPTH: " + depth);
-
         for (int i = 0; i < depth; i++) {
-            writer.println("   ");
+            writer.print("   ");
         }
         writer.println("|");
         for (int i = 0; i < depth; i++) {
-            writer.println("   ");
+            writer.print("   ");
         }
         writer.println("---> " + message);
         writer.flush();
