@@ -12,21 +12,23 @@ public class LoggingAspect {
 
     PrintWriter writer;
 
-    public LoggingAspect() {
-        try {
-            String logFileName = "${logFileName}";
-            if (logFileName != null && !logFileName.isEmpty()) {
-                writer = new PrintWriter(new FileWriter(logFileName, true));
-            } else {
-                writer = new PrintWriter(System.out);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+    public LoggingAspect() throws Exception {
+
+        String logFileName = "${logFileName}";
+        if (logFileName != null && !logFileName.isEmpty()) {
+            writer = new PrintWriter(new FileWriter(logFileName, true));
+        } else {
+            writer = new PrintWriter(System.out);
         }
     }
 
 
-    @Before("${MethodNames} && !within(LoggingAspect)")
+    @Pointcut("!within(ParallelizeAspect) || !within(CachingAspect) || !within(ExecutionTimeAspect) || !within(LoggingAspect) || !within(MethodProfilerAspect)")
+    public void excludeAspectClasses() {
+    }
+
+    @Before("(${MethodNames}) && excludeAspectClasses()")
+    //This method is used to log the beginning of the methods
     public void LogMethodEntry(JoinPoint joinPoint) {
 
         String message;
@@ -58,11 +60,11 @@ public class LoggingAspect {
             }
 
         }
-
     }
 
-    @AfterReturning(pointcut = "${MethodNames} && !within(LoggingAspect)", returning = "result")
-    public void LogMethodReturn(JoinPoint joinPoint, Object result) {
+    @AfterReturning(pointcut = "(${MethodNames}) && excludeAspectClasses()", returning = "result")
+    //This method is used to log the end of the methods
+    public void LogMethodReturn(JoinPoint joinPoint, Object result) throws Exception {
 
         String message;
         message = "Exiting " + joinPoint.getSignature().getName();
@@ -80,7 +82,8 @@ public class LoggingAspect {
         depth -= 1;
     }
 
-    @AfterThrowing(pointcut = "${MethodNames} && !within(LoggingAspect)", throwing = "exception")
+    @AfterThrowing(pointcut = "(${MethodNames}) && excludeAspectClasses()", throwing = "exception")
+    //This method is used to log the exceptions thrown by the methods
     public void logMethodException(JoinPoint joinPoint, Exception exception) throws Exception {
 
         String message = "Exception caught in " + joinPoint.getSignature().getName() + " of CLASS " + joinPoint.getTarget().getClass().getName();
@@ -91,25 +94,25 @@ public class LoggingAspect {
         throw exception;
     }
 
-    @Before("${FieldSetNames} && !within(LoggingAspect)")
-    public void LogFieldBeforeSet(JoinPoint joinPoint) {
+    @Before("(${FieldSetNames}) && excludeAspectClasses()")
+    //This method is used to log the field values before setting
+    public void LogFieldBeforeSet(JoinPoint joinPoint) throws Exception {
 
         String fieldName = joinPoint.getSignature().getName();
         Object value = null;
 
         String className = null;
 
-        try {
-            value = joinPoint.getTarget().getClass().getDeclaredField(fieldName).get(joinPoint.getTarget());
-            className = joinPoint.getTarget().getClass().getDeclaredField(fieldName).getDeclaringClass().getName();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
+        value = joinPoint.getTarget().getClass().getDeclaredField(fieldName).get(joinPoint.getTarget());
+        className = joinPoint.getTarget().getClass().getDeclaredField(fieldName).getDeclaringClass().getName();
+
         printLogMessage("Value of FIELD " + fieldName + " of CLASS " + className + " Before Setting is " + value);
     }
 
-    @After("${FieldSetNames} && !within(LoggingAspect)")
-    public void LogFieldAfterSet(JoinPoint joinPoint) {
+    @After("(${FieldSetNames}) && excludeAspectClasses()")
+    //This method is used to log the field values after setting
+    public void LogFieldAfterSet(JoinPoint joinPoint) throws Exception {
 
         String fieldName = joinPoint.getSignature().getName();
         Object value = null;
@@ -126,18 +129,15 @@ public class LoggingAspect {
         printLogMessage("Value of FIELD " + fieldName + " of CLASS " + className + " After Setting is " + value);
     }
 
-    @Before("${FieldGetNames} && !within(LoggingAspect)")
-    public void LogFieldGet(JoinPoint joinPoint) {
+    @Before("(${FieldGetNames}) && excludeAspectClasses()")
+    //This method is used to log the field values when accessed
+    public void LogFieldGet(JoinPoint joinPoint) throws Exception {
         String fieldName = joinPoint.getSignature().getName();
         Object value = null;
         String className = null;
-        try {
-            value = joinPoint.getTarget().getClass().getDeclaredField(fieldName).get(joinPoint.getTarget());
-            className = joinPoint.getTarget().getClass().getDeclaredField(fieldName).getDeclaringClass().getName();
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        value = joinPoint.getTarget().getClass().getDeclaredField(fieldName).get(joinPoint.getTarget());
+        className = joinPoint.getTarget().getClass().getDeclaredField(fieldName).getDeclaringClass().getName();
 
         printLogMessage("Accessed FIELD " + fieldName + " " + value + " of CLASS " + className);
     }

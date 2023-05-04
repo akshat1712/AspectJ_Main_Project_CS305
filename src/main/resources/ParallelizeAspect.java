@@ -14,15 +14,15 @@ import java.util.concurrent.Future;
 public class ParallelizeAspect {
 
 
-    @Pointcut("!within(ParallelizeAspect)")
-    public void excludeParallelizeAspect() {
+    @Pointcut("!within(ParallelizeAspect) || !within(CachingAspect) || !within(ExecutionTimeAspect) || !within(LoggingAspect) || !within(MethodProfilerAspect)")
+    public void excludeAspectClasses() {
     }
 
     @Pointcut("${MethodNames}")
-    public void methodAnnotatedWithParallelize() {
+    public void methodToBeParallelized() {
     }
-
-    @Around("methodAnnotatedWithParallelize() && excludeParallelizeAspect()")
+    @Around("methodToBeParallelized() && excludeAspectClasses()")
+    //This method parallelizes the methods
     public Object wrap(final ProceedingJoinPoint point) {
 
         final Class<?> returned = ((MethodSignature) point.getSignature()).getMethod().getReturnType();

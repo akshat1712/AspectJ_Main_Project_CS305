@@ -48,3 +48,4 @@ bin/
 *.txt
 
 TESTING_CODE/
+/docs/reports

@@ -1,5 +1,3 @@
-// ParallelizeAspect.java
-
 import com.sun.management.OperatingSystemMXBean;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -28,19 +26,19 @@ public class MethodProfilerAspect {
     }
 
 
-    @Pointcut("!within(MethodProfilerAspect)")
-    public void excludeMethodProfilerAspect() {
+    @Pointcut("!within(ParallelizeAspect) || !within(CachingAspect) || !within(ExecutionTimeAspect) || !within(LoggingAspect) || !within(MethodProfilerAspect)")
+    public void excludeAspectClasses() {
     }
 
-    @Around("${MethodNames} && excludeMethodProfilerAspect()")
+    @Around("(${MethodNames}) && excludeAspectClasses()")
+    //This method is used to measure the cpu and memory usage of the methods
     public Object wrap(final ProceedingJoinPoint point) throws Throwable {
 
 
         Object ret = null;
         try {
 
-            // MemoryMXBean memoryBean = ManagementFactory.getMemoryMXBean();
-            // MemoryUsage heapUsage = memoryBean.getHeapMemoryUsage();
+
             OperatingSystemMXBean osBean = ManagementFactory.getPlatformMXBean(OperatingSystemMXBean.class);
 
             Runtime runtime = Runtime.getRuntime();
@@ -75,14 +73,7 @@ public class MethodProfilerAspect {
             String temp = "cpuUsed";
             String cpuUsed = "CPU Usage: " + String.format("%.5f", cpuUsage) + "%";
             printProfiler(cpuUsed);
-            // System.out.println("Heap Memory Init: " + heapUsage.getInit()/factor + "  Mb");
-            // System.out.println("Heap Memory Used: " + heapUsage.getUsed()/factor + "  Mb");
-            // System.out.println("Heap Memory Committed: " + heapUsage.getCommitted()/factor + "  Mb");
 
-            // MemoryUsage nonHeapUsage = memoryBean.getNonHeapMemoryUsage();
-            // System.out.println("Non-Heap Memory Init: " + nonHeapUsage.getInit()/factor + "  Mb");
-            // System.out.println("Non-Heap Memory Used: " + nonHeapUsage.getUsed()/factor + "  Mb");
-            // System.out.println("Non-Heap Memory Committed: " + nonHeapUsage.getCommitted()/factor + "  Mb");
 
         } catch (Throwable e) {
             e.printStackTrace();
